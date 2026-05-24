@@ -1,0 +1,1136 @@
+@startuml LMS_Activity_Diagrams
+title LMS Bahasa - Activity Diagrams
+skinparam backgroundColor #FEFEFE
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  BarColor #DodgerBlue
+  ArrowColor #333333
+}
+skinparam note {
+  BackgroundColor #FFFFCC
+  BorderColor #FF9900
+}
+skinparam swimlane {
+  BorderColor black
+  BackgroundColor white
+}
+
+' ============================================================================
+' 1. USER REGISTRATION & VERIFICATION
+' ============================================================================
+
+section "1. USER REGISTRATION & VERIFICATION"
+
+subsection "1.1 Registration Flow"
+
+|Calon Pelajar|
+start
+:Akses Halaman Registrasi;
+:Isi Data Diri
+(Nama, Email, Username, No. Telp);
+:Pilih Kursus
+(English/Korean/Thai);
+:Upload Bukti Bayar;
+:Klik Tombol Submit;
+
+if (Validasi Form?) then (Lolos)
+  :Simpan Data Registrasi;
+  :Set Status = 'Pending';
+  :Tampilkan Pesan Sukses;
+  :Tunggu Verifikasi Admin;
+  stop
+else (Gagal)
+  :Tampilkan Error Validasi;
+  :Kembali ke Form;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "1.2 Registration Verification (Admin)"
+
+|Admin|
+start
+:Memilih menu
+verifikasi pendaftaran;
+
+|System|
+:Mengambil data
+pendaftar;
+
+|Database|
+:Mengembalikan data
+pendaftar;
+
+|System|
+:Menampilkan data
+pendaftar;
+
+|Admin|
+:Pilih calon pelajar;
+
+|System|
+:Menampilkan detail
+registrasi;
+
+|Admin|
+:Review bukti bayar;
+
+if (Valid?) then (Ya)
+  :Set Status = 'Verified';
+  :Tambah Catatan (Opsional);
+  :Klik tombol konfirmasi;
+  
+  |System|
+  :Menampilkan halaman
+  konfirmasi;
+  
+  |Admin|
+  :Klik "Buat User";
+  
+  |System|
+  :Menampilkan form
+  buat user;
+  
+  |Admin|
+  :Pilih Role
+  (Admin/Guru/Murid);
+  :Set Password;
+  :Klik Simpan;
+  
+  |System|
+  :Buat User Account;
+  :Konversi registrasi
+  ke user;
+  
+  if (Role = Murid?) then (Ya)
+    :Auto-enroll ke Kelas;
+  endif
+  
+  :Tampilkan pesan sukses;
+  stop
+  
+else (Tidak)
+  :Set Status = 'Rejected';
+  :Tambah Alasan Penolakan;
+  :Simpan Penolakan;
+  
+  |System|
+  :Kirim Notifikasi
+  ke Pelajar;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+' 2. AUTHENTICATION
+' ============================================================================
+
+section "2. AUTHENTICATION"
+
+subsection "2.1 Login Flow"
+
+|User|
+start
+:Akses Halaman Login;
+:Masukkan Email & Password;
+:Klik Login;
+
+|System|
+:Validasi Credentials;
+
+if (Credentials Valid?) then (Ya)
+  :Generate Session;
+  
+  if (User Role?) then (Admin)
+    :Redirect ke Admin Dashboard;
+  elseif (Guru)
+    :Redirect ke Teacher Dashboard;
+  else (Murid)
+    :Redirect ke Student Dashboard;
+  endif
+  stop
+else (Tidak)
+  :Tampilkan Pesan Error;
+  :Kembali ke Form Login;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "2.2 Password Reset"
+
+|User|
+start
+:Klik "Forgot Password";
+:Masukkan Email Terdaftar;
+:Klik Send Reset Link;
+
+|System|
+:Cek Email Exists?;
+
+if (Email Ditemukan?) then (Ya)
+  :Generate Reset Token;
+  :Kirim Email dengan Reset Link;
+  :Tampilkan "Check Your Email";
+  
+  |User|
+  :Klik Reset Link di Email;
+  :Masukkan Password Baru;
+  :Konfirmasi Password Baru;
+  :Klik Update Password;
+  
+  |System|
+  if (Passwords Match?) then (Ya)
+    :Hash Password Baru;
+    :Update Database;
+    :Invalidate Reset Token;
+    :Tampilkan Pesan Sukses;
+    :Redirect ke Login;
+    stop
+  else (Tidak)
+    :Tampilkan Pesan Error;
+    stop
+  endif
+else (Tidak)
+  :Tampilkan "Email Not Found";
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+' 3. ADMIN - CLASS MANAGEMENT
+' ============================================================================
+
+section "3. ADMIN - CLASS MANAGEMENT"
+
+subsection "3.1 Create Class"
+
+|Admin|
+start
+:Akses Menu Classes;
+:Klik "Add Class";
+
+|System|
+:Menampilkan form
+tambah kelas;
+
+|Admin|
+:Isi Form Kelas
+(Nama Kelas, Kursus, Guru,
+ Periode, Status, Jumlah Hari);
+:Klik Simpan;
+
+|System|
+:Validasi Form;
+
+if (Validasi Lolos?) then (Ya)
+  :Simpan Kelas ke Database;
+  :Tampilkan Pesan Sukses;
+  stop
+else (Tidak)
+  :Tampilkan Error Validasi;
+  :Kembali ke Form;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "3.2 Enroll Students to Class"
+
+|Admin|
+start
+:Buka Detail Kelas;
+:Klik "Enroll Students";
+
+|System|
+:Menampilkan daftar
+murid tersedia;
+
+|Admin|
+:Pilih Murid untuk Enroll;
+:Klik Enroll;
+
+|System|
+if (Ada Murid Terpilih?) then (Ya)
+  :Cek Enrolment Existing;
+  
+  if (Sudah Enroll?) then (Ya)
+    :Tampilkan Warning Duplicate;
+  else (Tidak)
+    :Tambah ke class_students;
+    :Kirim Notifikasi ke Murid;
+  endif
+  
+  :Tampilkan Pesan Sukses;
+  :Update Jumlah Murid;
+  stop
+else (Tidak)
+  :Tampilkan "No Students Selected";
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "3.3 User Management"
+
+|Admin|
+start
+:Akses Menu Users;
+:Melihat daftar Users;
+
+if (Aksi?) then (Search/Filter)
+  :Masukkan Search Query;
+  :Filter by Role;
+  :Lihat Hasil Filter;
+  
+elseif (Create User)
+  :Klik "Add User";
+  :Isi Form User
+  (Nama, Email, Username, Role, Password);
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Buat User di Database;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Edit User)
+  :Klik Edit pada User;
+  :Ubah Data User;
+  :Klik Update;
+  
+  |System|
+  if (User != Admin Login?) then (Ya)
+    :Update Database;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan "Cannot Edit Self";
+    stop
+  endif
+  
+elseif (Delete User)
+  :Klik Delete pada User;
+  :Konfirmasi Hapus;
+  
+  |System|
+  if (User != Admin Login?) then (Ya)
+    :Hapus User dari Database;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan "Cannot Delete Self";
+    stop
+  endif
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+' 4. TEACHER (GURU) - CLASS MANAGEMENT
+' ============================================================================
+
+section "4. TEACHER (GURU) - CLASS MANAGEMENT"
+
+subsection "4.1 Teacher Dashboard"
+
+|Guru|
+start
+:Login sebagai Guru;
+:Akses Teacher Dashboard;
+:Melihat Kelas Diampu;
+:Melihat Statistik Kelas;
+
+if (Pilih Kelas?) then (Ya)
+  :Navigate ke Class Detail;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.2 Meeting Management"
+
+|Guru|
+start
+:Buka Detail Kelas;
+:Melihat Daftar Pertemuan;
+
+if (Aksi?) then (Create Meeting)
+  :Klik "Add Meeting";
+  :Isi Form Meeting
+  (Urutan, Judul, Deskripsi);
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Simpan Meeting ke Database;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Edit Meeting)
+  :Klik Edit pada Meeting;
+  :Ubah Data Meeting;
+  :Klik Update;
+  
+  |System|
+  :Update Database;
+  :Tampilkan Pesan Sukses;
+  stop
+  
+elseif (Delete Meeting)
+  :Klik Delete pada Meeting;
+  :Konfirmasi Hapus;
+  
+  if (Konfirmasi?) then (Ya)
+    |System|
+    :Hapus Meeting;
+    :Cascade Hapus (Materials, Quizzes,
+     Assignments, Announcements);
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Batal Hapus;
+    stop
+  endif
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.3 Material Management"
+
+|Guru|
+start
+:Buka Detail Meeting;
+:Melihat Daftar Materi;
+
+if (Aksi?) then (Upload Material)
+  :Klik "Add Material";
+  :Pilih Tipe Materi
+  (Video/PDF/Document);
+  
+  if (Tipe = Video?) then (Ya)
+    :Masukkan URL YouTube;
+  else (PDF/Document)
+    :Upload File;
+    :Validasi Tipe & Ukuran File;
+  endif
+  
+  :Masukkan Judul Materi;
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Simpan Materi ke Database;
+    :Simpan File/URL;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (View Material)
+  :Klik pada Materi;
+  :View/Play Materi;
+  stop
+  
+elseif (Delete Material)
+  :Klik Delete pada Materi;
+  :Konfirmasi Hapus;
+  
+  if (Konfirmasi?) then (Ya)
+    |System|
+    :Hapus dari Database;
+    :Hapus File (jika ada);
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Batal Hapus;
+    stop
+  endif
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.4 Quiz Management"
+
+|Guru|
+start
+:Buka Detail Meeting;
+:Melihat Daftar Kuis;
+
+if (Aksi?) then (Create Quiz)
+  :Klik "Add Quiz";
+  :Isi Form Kuis
+  (Judul, Skill, Deskripsi, Durasi);
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Buat Kuis di Database;
+    :Navigate ke Question Editor;
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Add Questions)
+  :Buka Detail Kuis;
+  :Klik "Add Question";
+  :Masukkan Soal;
+  :Masukkan 4 Opsi (A, B, C, D);
+  :Pilih Jawaban Benar;
+  :Set Poin;
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Simpan Soal ke Database;
+    :Tampilkan Pesan Sukses;
+    :Ulangi untuk Soal Lain;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Edit Question)
+  :Klik Edit pada Soal;
+  :Ubah Soal/Jawaban;
+  :Klik Update;
+  
+  |System|
+  :Update Database;
+  stop
+  
+elseif (Delete Question)
+  :Klik Delete pada Soal;
+  :Konfirmasi Hapus;
+  
+  |System|
+  :Hapus dari Database;
+  stop
+  
+elseif (Delete Quiz)
+  :Klik Delete pada Kuis;
+  :Konfirmasi Hapus;
+  
+  |System|
+  :Cascade Hapus Soal;
+  :Hapus dari Database;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.5 Assignment Management"
+
+|Guru|
+start
+:Buka Detail Meeting;
+:Melihat Daftar Tugas;
+
+if (Aksi?) then (Create Assignment)
+  :Klik "Add Assignment";
+  :Isi Form Tugas
+  (Judul, Skill, Deskripsi,
+   Deadline, Max Points);
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Buat Tugas di Database;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Edit Assignment)
+  :Klik Edit pada Tugas;
+  :Ubah Detail Tugas;
+  :Klik Update;
+  
+  |System|
+  :Update Database;
+  stop
+  
+elseif (Delete Assignment)
+  :Klik Delete pada Tugas;
+  :Konfirmasi Hapus;
+  
+  |System|
+  :Hapus dari Database;
+  stop
+  
+elseif (View Submissions)
+  :Klik pada Tugas;
+  :Melihat Submission Murid;
+  :Cek Status Submission;
+  
+  if (Grade Submission?) then (Ya)
+    :Buka Detail Submission;
+    :Review Pekerjaan Murid;
+    :Masukkan Nilai (0-100);
+    :Masukkan Feedback;
+    :Klik Simpan Nilai;
+    
+    |System|
+    :Update Database;
+    :Notifikasi ke Murid;
+    stop
+  else
+    stop
+  endif
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.6 Attendance Management"
+
+|Guru|
+start
+:Buka Detail Meeting;
+:Klik "Mark Attendance";
+
+|System|
+:Menampilkan daftar
+murid enrolled;
+
+|Guru|
+for (Setiap Murid)
+  :Pilih Status Kehadiran
+  (Hadir/Izin/Sakit/Alpha);
+endfor (Murid)
+
+:Klik Simpan Kehadiran;
+
+|System|
+:Simpan ke Database;
+:Tampilkan Pesan Sukses;
+
+|Guru|
+if (Lihat Kehadiran?) then (Ya)
+  :Melihat Record Kehadiran;
+  :Melihat Ringkasan Kehadiran;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.7 Announcement Management"
+
+|Guru|
+start
+:Buka Detail Meeting;
+:Melihat Daftar Pengumuman;
+
+if (Aksi?) then (Create Announcement)
+  :Klik "Add Announcement";
+  :Masukkan Konten Pengumuman;
+  :Set Priority Flag (Opsional);
+  :Klik Simpan;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Buat Pengumuman di Database;
+    :Notifikasi ke Murid;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+  
+elseif (Edit Announcement)
+  :Klik Edit pada Pengumuman;
+  :Ubah Konten;
+  :Klik Update;
+  
+  |System|
+  :Update Database;
+  stop
+  
+elseif (Delete Announcement)
+  :Klik Delete pada Pengumuman;
+  :Konfirmasi Hapus;
+  
+  |System|
+  :Hapus dari Database;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.8 Certificate Generation"
+
+|Guru|
+start
+:Akses Menu Certificate;
+:Pilih Kelas;
+:Pilih Murid;
+
+|System|
+:Melihat Progress Murid;
+
+|Guru|
+if (Eligible for Certificate?) then (Ya)
+  :Klik "Generate Certificate";
+  :Input Nilai Skill
+  (Reading, Writing, Listening,
+   Speaking, Grammar);
+  
+  :Preview Certificate;
+  
+  if (Nilai Valid?) then (Ya)
+    :Konfirmasi Certificate;
+    
+    |System|
+    :Generate PDF Certificate;
+    :Simpan ke Database;
+    :Notifikasi ke Murid;
+    :Tampilkan Pesan Sukses;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+else (Tidak)
+  :Tampilkan "Student Not Eligible";
+  :Tampilkan Requirements;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "4.9 Grade Management (Rekap Nilai)"
+
+|Guru|
+start
+:Akses Menu Grade Management;
+:Pilih Kelas;
+
+|System|
+:Menampilkan Grade Summary;
+
+|Guru|
+if (Aksi?) then (View Student Detail)
+  :Pilih Murid;
+  :Melihat Grade Report Individual
+  (Quizzes, Assignments, Skills);
+  
+elseif (Export Grades)
+  :Klik "Export Excel";
+  
+  |System|
+  :Generate Excel File;
+  :Download File;
+  stop
+  
+elseif (View Class Average)
+  :Melihat Rata-rata per Skill;
+  :Melihat Statistik Pass/Fail;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+' 5. STUDENT (MURID) - LEARNING
+' ============================================================================
+
+section "5. STUDENT (MURID) - LEARNING"
+
+subsection "5.1 Student Dashboard"
+
+|Murid|
+start
+:Login sebagai Murid;
+:Akses Student Dashboard;
+:Melihat Kelas Diikuti;
+:Melihat Progress Belajar;
+:Melihat Pengumuman Terbaru;
+
+if (Pilih Kelas?) then (Ya)
+  :Navigate ke Class Detail;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "5.2 Learning Materials Access"
+
+|Murid|
+start
+:Buka Detail Kelas;
+:Melihat Daftar Meeting;
+:Pilih Meeting;
+:Melihat Daftar Materi;
+
+if (Tipe Materi?) then (Video)
+  :Klik Materi Video;
+  :Play Video YouTube;
+  :Mark as Viewed (Opsional);
+  stop
+elseif (PDF)
+  :Klik Materi PDF;
+  :View/Download PDF;
+  stop
+elseif (Document)
+  :Klik Document;
+  :Download Document;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "5.3 Take Quiz"
+
+|Murid|
+start
+:Buka Detail Meeting;
+:Melihat Kuis Tersedia;
+:Pilih Kuis;
+:Baca Instruksi Kuis;
+:Cek Durasi;
+:Klik "Start Quiz";
+
+|System|
+:Tampilkan Soal 1;
+:Start Timer;
+
+|Murid|
+while (Ada Soal?) is (Ya)
+  :Baca Soal;
+  :Pilih Jawaban (A/B/C/D);
+  
+  if (Soal Terakhir?) then (Tidak)
+    :Klik Next;
+    :Tampilkan Soal Berikutnya;
+  else (Ya)
+    :Review Jawaban (Opsional);
+    :Klik Submit Quiz;
+  endif
+endwhile (Tidak)
+
+|System|
+:Hitung Nilai;
+:Simpan Nilai ke Database;
+:Tampilkan Hasil;
+:Tampilkan Kunci Jawaban;
+:Tampilkan Ringkasan Nilai;
+stop
+
+end subsection
+
+' ============================================================================
+
+subsection "5.4 Submit Assignment"
+
+|Murid|
+start
+:Buka Detail Meeting;
+:Melihat Tugas;
+:Pilih Tugas;
+:Baca Requirement Tugas;
+:Cek Deadline;
+
+if (Sebelum Deadline?) then (Ya)
+  :Siapkan File Tugas;
+  :Klik "Submit Assignment";
+  :Upload File;
+  :Tambah Catatan (Opsional);
+  :Klik Submit;
+  
+  |System|
+  if (Validasi Lolos?) then (Ya)
+    :Simpan Submission ke Database;
+    :Simpan File;
+    :Set Status = 'Submitted';
+    :Tampilkan Pesan Sukses;
+    :Tunggu Grading;
+    stop
+  else (Tidak)
+    :Tampilkan Error Validasi;
+    stop
+  endif
+else (Tidak)
+  :Tampilkan "Deadline Passed";
+  :Cannot Submit;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "5.5 View Graded Assignment"
+
+|Murid|
+start
+:Buka Detail Tugas;
+:Melihat Status Submission;
+
+if (Status = Graded?) then (Ya)
+  :Melihat Nilai;
+  :Melihat Feedback Guru;
+  :Review Detail Nilai;
+  :Download File (jika dikembalikan);
+  stop
+elseif (Status = Submitted)
+  :Tampilkan "Pending Grading";
+  :Tunggu Guru;
+  stop
+else (Belum Submit)
+  :Tampilkan "Not Submitted";
+  :Navigate to Submit;
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "5.6 Certificate Access"
+
+|Murid|
+start
+:Akses "My Certificates";
+:Melihat Daftar Sertifikat;
+
+if (Ada Sertifikat?) then (Ya)
+  :Pilih Sertifikat;
+  :View Preview Sertifikat;
+  :Melihat Detail Nilai Skill;
+  
+  if (Download?) then (Ya)
+    :Klik "Download PDF";
+    
+    |System|
+    :Generate PDF;
+    :Download ke Device;
+    stop
+  else
+    stop
+  endif
+else (Tidak)
+  :Tampilkan "No Certificates Yet";
+  :Melihat Requirements;
+  :Contact Teacher (Opsional);
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+
+subsection "5.7 Attendance View"
+
+|Murid|
+start
+:Buka Detail Kelas;
+:Klik "My Attendance";
+
+|System|
+:Menampilkan Record Kehadiran
+per Meeting;
+
+|Murid|
+:Melihat Ringkasan Kehadiran;
+:Melihat Persentase Kehadiran;
+
+if (Kehadiran Rendah?) then (Ya)
+  :Tampilkan Warning;
+  :Tampilkan Minimum Requirement;
+  stop
+else
+  stop
+endif
+
+end subsection
+
+' ============================================================================
+' 6. COMPLETE WORKFLOWS
+' ============================================================================
+
+section "6. COMPLETE WORKFLOWS"
+
+subsection "6.1 Complete Registration to Learning Flow"
+
+|Calon Pelajar|
+start
+:Register Online;
+:Upload Bukti Bayar;
+:Tunggu Verifikasi;
+
+|Admin|
+:Verify Registration;
+:Create User Account;
+:Enroll to Class;
+
+|Murid|
+:Receive Notification;
+:Login ke System;
+:Akses Kelas Diikuti;
+:Melihat Materi;
+:Mengerjakan Kuis;
+:Mengumpulkan Tugas;
+:Melihat Nilai;
+:Receive Certificate;
+stop
+
+end subsection
+
+' ============================================================================
+
+subsection "6.2 Complete Teaching Flow"
+
+|Guru|
+start
+:Login ke Dashboard;
+:Pilih Kelas Diampu;
+:Buat Meetings;
+:Upload Materials;
+:Buat Quizzes;
+:Tambah Soal Kuis;
+:Buat Assignments;
+:Mark Attendance;
+:Post Announcements;
+
+loop (Untuk Setiap Submission)
+  :Grade Assignments;
+  :Provide Feedback;
+endloop (Murid)
+
+:Generate Certificates;
+:Export Grade Reports;
+stop
+
+end subsection
+
+' ============================================================================
+
+subsection "6.3 Complete Assessment Flow"
+
+|Guru|
+:Buat Quiz/Assignment;
+:Set Duration/Deadline;
+:Notify Students;
+
+|Murid|
+:Mengerjakan Quiz/Submit Assignment;
+
+|Guru|
+:Review Submissions;
+:Grade & Provide Feedback;
+:Save Grades;
+
+|Murid|
+:Melihat Hasil;
+:Review Feedback;
+
+|Guru|
+:Compile Grade Summary;
+:Export Reports;
+:Generate Certificate (jika eligible);
+stop
+
+end subsection
+
+' ============================================================================
+
+subsection "6.4 Complete Class Management Flow"
+
+|Admin|
+start
+:Buat Kelas;
+:Assign Teacher;
+:Enroll Students;
+
+|Guru|
+:Akses Kelas;
+:Manage Content
+(Meetings, Materials, Quizzes, Assignments);
+:Track Attendance;
+:Grade Assessments;
+
+|Murid|
+:Akses Konten Kelas;
+:Participate in Learning;
+:Complete Assessments;
+
+|Guru|
+:Generate Certificates;
+:Export Grades;
+
+|Admin|
+:Monitor Class Progress;
+stop
+
+end subsection
+
+@enduml

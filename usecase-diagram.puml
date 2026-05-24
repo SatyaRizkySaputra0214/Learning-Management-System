@@ -1,0 +1,140 @@
+@startuml LMS_UseCase_Diagram
+' Style matching the reference image
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #E0F7FA
+  BorderColor #00838F
+  ArrowColor #006064
+  FontName Arial
+  FontSize 14
+}
+skinparam actor {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+  FontName Arial
+  FontSize 12
+}
+skinparam linetype ortho
+
+title UML Use Case Diagram - LMS Bahasa
+
+left to right direction
+
+' System Boundary
+rectangle "Learning Management System (LMS Bahasa)" {
+  
+  ' ==================== USE CASES ====================
+  
+  ' Authentication & Registration
+  usecase "Login" as UC_LOGIN
+  usecase "Register (Pendaftaran)" as UC_REGISTER
+  usecase "Upload Bukti Pembayaran" as UC_UPLOAD_PAYMENT
+  
+  ' Admin Use Cases
+  usecase "Verifikasi Pendaftaran" as UC_VERIFY_REG
+  usecase "Kelola Akun Guru" as UC_MANAGE_TEACHER
+  usecase "Kelola Akun Murid" as UC_MANAGE_STUDENT
+  usecase "Kelola Kelas" as UC_MANAGE_CLASS
+  usecase "Penempatan Kelas (Enrollment)" as UC_ENROLL
+  
+  ' Guru Use Cases
+  usecase "Kelola Pertemuan" as UC_MANAGE_MEETING
+  usecase "Upload Materi" as UC_UPLOAD_MATERIAL
+  usecase "Buat Kuis (Quiz Builder)" as UC_CREATE_QUIZ
+  usecase "Kelola Penugasan" as UC_MANAGE_ASSIGNMENT
+  usecase "Koreksi & Nilai Tugas" as UC_GRADE_ASSIGNMENT
+  usecase "Generate Sertifikat" as UC_GEN_CERTIFICATE
+  usecase "Generate Rapor/Nilai" as UC_GEN_REPORT
+  usecase "Mark Attendance" as UC_ATTENDANCE
+  
+  ' Murid Use Cases
+  usecase "Akses Materi" as UC_ACCESS_MATERIAL
+  usecase "Kerjakan Kuis" as UC_TAKE_QUIZ
+  usecase "Kumpul Tugas" as UC_SUBMIT_ASSIGNMENT
+  usecase "Lihat Progress Nilai" as UC_VIEW_PROGRESS
+  usecase "Download Sertifikat" as UC_DOWNLOAD_CERT
+  usecase "Lihat Pengumuman" as UC_VIEW_ANNOUNCEMENT
+  
+  ' Settings
+  usecase "Manage Profile" as UC_PROFILE
+  usecase "Change Password" as UC_PASSWORD
+  
+}
+
+' ==================== ACTORS ====================
+
+actor "Admin" as Admin
+actor "Guru\n(Instruktur)" as Guru
+actor "Murid\n(Peserta)" as Murid
+actor "Guest" as Guest
+
+' ==================== ASSOCIATIONS ====================
+
+' Guest associations
+Guest -- UC_LOGIN
+Guest -- UC_REGISTER
+Guest -- UC_UPLOAD_PAYMENT
+
+' Admin associations
+Admin -- UC_LOGIN
+Admin -- UC_VERIFY_REG
+Admin -- UC_MANAGE_TEACHER
+Admin -- UC_MANAGE_STUDENT
+Admin -- UC_MANAGE_CLASS
+Admin -- UC_ENROLL
+Admin -- UC_PROFILE
+Admin -- UC_PASSWORD
+
+' Guru associations
+Guru -- UC_LOGIN
+Guru -- UC_MANAGE_MEETING
+Guru -- UC_UPLOAD_MATERIAL
+Guru -- UC_CREATE_QUIZ
+Guru -- UC_MANAGE_ASSIGNMENT
+Guru -- UC_GRADE_ASSIGNMENT
+Guru -- UC_GEN_CERTIFICATE
+Guru -- UC_GEN_REPORT
+Guru -- UC_ATTENDANCE
+Guru -- UC_PROFILE
+Guru -- UC_PASSWORD
+
+' Murid associations
+Murid -- UC_LOGIN
+Murid -- UC_ACCESS_MATERIAL
+Murid -- UC_TAKE_QUIZ
+Murid -- UC_SUBMIT_ASSIGNMENT
+Murid -- UC_VIEW_PROGRESS
+Murid -- UC_DOWNLOAD_CERT
+Murid -- UC_VIEW_ANNOUNCEMENT
+Murid -- UC_PROFILE
+Murid -- UC_PASSWORD
+
+' ==================== INCLUDES & EXTENDS ====================
+
+' Registration flow
+UC_REGISTER ..> UC_UPLOAD_PAYMENT : <<include>>
+UC_VERIFY_REG ..> UC_MANAGE_STUDENT : <<include>>
+
+' Class Management
+UC_MANAGE_CLASS ..> UC_ENROLL : <<include>>
+
+' Meeting & Content
+UC_MANAGE_MEETING ..> UC_ATTENDANCE : <<include>>
+UC_UPLOAD_MATERIAL ..> UC_MANAGE_MEETING : <<include>>
+
+' Quiz flow
+UC_CREATE_QUIZ ..> UC_MANAGE_MEETING : <<include>>
+UC_TAKE_QUIZ ..> UC_ACCESS_MATERIAL : <<include>>
+
+' Assignment flow
+UC_MANAGE_ASSIGNMENT ..> UC_MANAGE_MEETING : <<include>>
+UC_SUBMIT_ASSIGNMENT ..> UC_ACCESS_MATERIAL : <<include>>
+UC_GRADE_ASSIGNMENT ..> UC_MANAGE_ASSIGNMENT : <<include>>
+
+' Certificate & Report
+UC_GEN_CERTIFICATE ..> UC_GEN_REPORT : <<include>>
+UC_DOWNLOAD_CERT ..> UC_VIEW_PROGRESS : <<include>>
+
+@enduml
