@@ -146,7 +146,4 @@ Saat ini sistem fokus pada aplikasi web berbasis Blade. Namun, beberapa endpoint
 - `GET /murid/quizzes/{quiz}/deadline` – Mengecek batas waktu kuis.
 - `POST /murid/notifications/{announcement}/read` – Menandai pengumuman telah dibaca.
 
----
 
-## Lisensi
-Proyek ini dilisensikan di bawah [MIT License](LICENSE).
