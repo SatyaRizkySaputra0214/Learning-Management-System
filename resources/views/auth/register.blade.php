@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="w-full max-w-md">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 border border-gray-200 dark:border-gray-700">
         <div class="text-center mb-8">
             <div class="flex items-center justify-center mx-auto mb-4">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="w-20 h-20 object-contain">
@@ -100,6 +100,8 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     const kursusSelect = document.getElementById('kursus_pilihan');
                     const tingkatSelect = document.getElementById('tingkat_bahasa');
+                    const buktiWrapper = document.getElementById('bukti_kemampuan_dasar_wrapper');
+                    const buktiInput = document.getElementById('bukti_kemampuan_dasar');
                     
                     const levels = {
                         'eng': [
@@ -117,11 +119,17 @@
                         ]
                     };
 
+                    function isBuktiWajib(kursus, tingkat) {
+                        if (kursus === 'eng' && (tingkat === 'A2' || tingkat === 'B1')) return true;
+                        if (kursus === 'kor' && tingkat === 'Intermediate') return true;
+                        if (kursus === 'th' && tingkat === 'Intermediate') return true;
+                        return false;
+                    }
+
                     function updateLevels() {
                         const selectedKursus = kursusSelect.value;
                         const currentLevel = "{{ old('tingkat_bahasa') }}";
                         
-                        // Clear current options except the first one
                         tingkatSelect.innerHTML = '<option value="">Pilih Tingkat</option>';
                         
                         if (selectedKursus && levels[selectedKursus]) {
@@ -135,16 +143,48 @@
                                 tingkatSelect.appendChild(option);
                             });
                         }
+                        
+                        updateBuktiField();
+                    }
+
+                    function updateBuktiField() {
+                        const kursus = kursusSelect.value;
+                        const tingkat = tingkatSelect.value;
+                        
+                        if (kursus && tingkat && isBuktiWajib(kursus, tingkat)) {
+                            buktiWrapper.classList.remove('hidden');
+                            buktiInput.setAttribute('required', 'required');
+                        } else {
+                            buktiWrapper.classList.add('hidden');
+                            buktiInput.removeAttribute('required');
+                            buktiInput.value = '';
+                        }
                     }
 
                     kursusSelect.addEventListener('change', updateLevels);
+                    tingkatSelect.addEventListener('change', updateBuktiField);
                     
-                    // Initial update if old value exists
                     if (kursusSelect.value) {
                         updateLevels();
                     }
                 });
             </script>
+
+            <div id="bukti_kemampuan_dasar_wrapper" class="hidden">
+                <label for="bukti_kemampuan_dasar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Bukti Kemampuan Dasar / Sertifikat Level Sebelumnya
+                </label>
+                <input type="file"
+                       id="bukti_kemampuan_dasar"
+                       name="bukti_kemampuan_dasar"
+                       accept="image/*"
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('bukti_kemampuan_dasar') border-red-500 @enderror">
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Format: JPG, PNG (Max. 2MB)</p>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Sertifikat pernah mengikuti kelas level sebelumnya, Sertifikat kursus dari lembaga lain, atau Dokumen pendukung yang menunjukkan penguasaan level dasar.</p>
+                @error('bukti_kemampuan_dasar')
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div>
                 <label for="bukti_bayar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -163,7 +203,7 @@
             </div>
 
             <button type="submit" 
-                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                    class="w-full inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200">
                 Daftar
             </button>
         </form>

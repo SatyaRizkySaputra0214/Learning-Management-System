@@ -1,213 +1,152 @@
-# LMS Bahasa - Learning Management System
+# Sistem Manajemen Pembelajaran (LMS) Sekolah Bahasa
 
-Sistem Manajemen Pembelajaran untuk Kursus Bahasa Asing (English, Korean, Thai)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-## 📋 Fitur Utama
+Sistem ini adalah platform **Learning Management System (LMS)** yang dirancang khusus untuk manajemen sekolah bahasa. Aplikasi ini memfasilitasi interaksi antara admin, guru, dan murid dalam proses belajar mengajar, mulai dari pendaftaran online hingga penerbitan sertifikat.
 
-### Admin (Super User)
-- ✅ Verifikasi Pembayaran - Memeriksa bukti bayar dari form pendaftaran murid
-- ✅ Manajemen Akun - Membuat akun Guru dan Murid secara manual (Sistem Tertutup)
-- ✅ Penempatan Kelas (Enrollment) - Menentukan Guru pengampu dan Murid ke dalam kelas bahasa
+Proyek ini dibangun menggunakan **Laravel 12**, **TailwindCSS 4**, dan **Alpine.js**, memberikan pengalaman pengguna yang modern, cepat, dan responsif.
 
-### Guru (Instruktur)
-- ✅ Manajemen Kelas - CRUD kelas yang diampu
-- ✅ Manajemen Pertemuan - Mengatur urutan pertemuan
-- ✅ Upload Materi - Video (Link/File), PDF, dan Dokumen
-- ✅ Quiz Builder - Membuat kuis Pilihan Ganda dengan label kemampuan
-- ✅ Manajemen Penugasan - Membuat slot tugas, koreksi manual, dan pemberian nilai
-- ✅ Sertifikat & Rapor - Generate sertifikat otomatis dengan rincian nilai per elemen
+---
 
-### Murid (Peserta)
-- ✅ Pendaftaran & Pembayaran - Form pendaftaran dan upload bukti transfer
-- ✅ Akses Materi - Melihat dan mengunduh materi per pertemuan
-- ✅ Pengerjaan Tugas & Kuis - Mengerjakan kuis PG dan mengumpulkan tugas
-- ✅ Progress & Sertifikat - Melihat nilai dan mengunduh sertifikat
+## 2. Latar Belakang dan Tujuan
 
-## 🚀 Instalasi
+### Permasalahan
+Banyak sekolah bahasa masih menggunakan cara manual dalam mengelola pendaftaran murid, pembagian materi, pelaksanaan kuis, dan pemantauan perkembangan siswa. Hal ini sering menyebabkan ketidakteraturan data dan sulitnya pelaporan nilai.
 
-### Prasyarat
-- PHP 8.2 atau lebih baru
-- Composer
-- Node.js & NPM
-- MySQL atau SQLite
+### Tujuan
+Membangun platform digital yang terintegrasi untuk mengotomatisasi proses administrasi dan akademik di sekolah bahasa.
 
-### Langkah Instalasi
+### Manfaat
+- **Bagi Admin:** Mempermudah verifikasi pendaftaran dan manajemen pengguna/kelas.
+- **Bagi Guru:** Efisiensi dalam memberikan materi, tugas, kuis, dan absensi.
+- **Bagi Murid:** Kemudahan akses materi dan pemantauan progres belajar secara real-time.
 
-1. **Clone repository**
-```bash
-git clone <repository-url>
-cd starter-kit-main
-```
+---
 
-2. **Install dependencies**
-```bash
-composer install
-npm install
-```
+## 3. Fitur Utama
 
-3. **Setup environment**
-```bash
-copy .env.example .env
-php artisan key:generate
-```
+### 🔐 Autentikasi & Multi-Role
+- Sistem login dengan 3 level akses: **Admin**, **Guru**, dan **Murid**.
+- Manajemen profil dan preferensi tema (Light/Dark mode).
 
-4. **Setup database**
+### 🏛️ Dashboard Admin
+- **Manajemen Pendaftaran:** Verifikasi calon murid baru berdasarkan tingkat bahasa.
+- **Manajemen Pengguna:** Kontrol penuh atas data Guru, Murid, dan Admin.
+- **Manajemen Kelas:** Pembuatan kelas dan proses *enrollment* siswa ke kelas.
+- **Monitoring:** Memantau detail perkembangan siswa di setiap kelas.
 
-   Untuk SQLite (lebih sederhana):
-```bash
-type null > database\database.sqlite
-php artisan migrate
-```
+### 👨‍🏫 Fitur Guru
+- **Manajemen Pertemuan:** Membuat jadwal pertemuan di setiap kelas.
+- **Materi & Pengumuman:** Unggah materi pembelajaran dan broadcast pengumuman.
+- **Kuis & Tugas:** Pembuatan kuis interaktif dan penugasan dengan sistem pengumpulan file.
+- **E-Certificate:** Menghasilkan sertifikat bagi siswa yang telah menyelesaikan kursus.
+- **Rekap Nilai:** Laporan nilai lengkap yang dapat diekspor ke format Excel.
+- **Absensi:** Pencatatan kehadiran siswa di setiap pertemuan.
 
-   Untuk MySQL:
-```bash
-# Edit .env dan sesuaikan DB_CONNECTION, DB_DATABASE, DB_USERNAME, DB_PASSWORD
-php artisan migrate
-```
+### 🎓 Fitur Murid
+- **Akses Kelas:** Melihat kelas yang diikuti dan daftar pertemuan.
+- **Pengerjaan Kuis:** Mengikuti kuis online dengan batasan waktu/deadline.
+- **Submit Tugas:** Mengunggah hasil tugas langsung melalui platform.
+- **Unduh Materi & Sertifikat:** Akses mudah ke semua sumber daya belajar dan sertifikat digital.
 
-5. **Seed database (Data Awal)**
-```bash
-php artisan db:seed
-```
+---
 
-6. **Build assets**
-```bash
-npm run build
-```
+## 4. Teknologi yang Digunakan
 
-7. **Jalankan aplikasi**
-```bash
-php artisan serve
-```
-
-Aplikasi akan berjalan di: **http://localhost:8000**
-
-## 👤 Akun Default (Setelah Seed)
-
-### Admin
-- **Username:** `admin`
-- **Password:** `password`
-- **Link:** http://localhost:8000/admin/dashboard
-
-### Guru
-- **Username:** `guru1`
-- **Password:** `password`
-- **Link:** http://localhost:8000/guru/dashboard
-
-- **Username:** `guru2`
-- **Password:** `password`
-
-### Murid
-- **Username:** `murid1`
-- **Password:** `password`
-- **Link:** http://localhost:8000/murid/dashboard
-
-- **Username:** `murid2`
-- **Password:** `password`
-
-## 🔗 Link Akses per Aktor
-
-### Public (Tanpa Login)
-| Fitur | URL |
-|-------|-----|
-| Login | http://localhost:8000/login |
-| Pendaftaran | http://localhost:8000/register |
-
-### Admin
-| Fitur | URL |
-|-------|-----|
-| Dashboard | http://localhost:8000/admin/dashboard |
-| Verifikasi Pendaftaran | http://localhost:8000/admin/registrations |
-| Manajemen User | http://localhost:8000/admin/users |
-| Manajemen Kelas | http://localhost:8000/admin/classes |
-
-### Guru
-| Fitur | URL |
-|-------|-----|
-| Dashboard | http://localhost:8000/guru/dashboard |
-| Kelas Saya | http://localhost:8000/guru/classes |
-| Kelola Pertemuan | http://localhost:8000/guru/classes/{id} |
-| Upload Materi | http://localhost:8000/guru/meetings/{id}/materials/create |
-| Buat Kuis | http://localhost:8000/guru/meetings/{id}/quizzes/create |
-| Buat Tugas | http://localhost:8000/guru/meetings/{id}/assignments/create |
-| Nilai Tugas | http://localhost:8000/guru/assignments/{id}/submissions |
-| Generate Sertifikat | http://localhost:8000/guru/classes/{id}/students/{id}/certificate/generate |
-
-### Murid
-| Fitur | URL |
-|-------|-----|
-| Dashboard | http://localhost:8000/murid/dashboard |
-| Kelas Saya | http://localhost:8000/murid/classes/{id} |
-| Lihat Pertemuan | http://localhost:8000/murid/meetings/{id} |
-| Kerjakan Kuis | http://localhost:8000/murid/quizzes/{id}/take |
-| Kumpul Tugas | http://localhost:8000/murid/assignments/{id}/submit |
-| Sertifikat Saya | http://localhost:8000/murid/certificates |
-
-## 📊 Struktur Database
-
-### Tabel Utama
-- `users` - Data pengguna (admin, guru, murid)
-- `registrations` - Pendaftaran murid baru
-- `courses` - Kursus bahasa (English, Korean, Thai)
-- `classes` - Kelas pembelajaran
-- `class_students` - Relasi murid ke kelas
-- `skills` - Kemampuan (Reading, Writing, Listening, Speaking, Grammar)
-- `meetings` - Pertemuan per kelas
-- `materials` - Materi pembelajaran
-- `quizzes` - Kuis
-- `questions` - Soal kuis
-- `assignments` - Tugas
-- `quiz_scores` - Nilai kuis
-- `assignment_submissions` - Pengumpulan tugas
-- `certificates` - Sertifikat
-
-## 🛠️ Teknologi yang Digunakan
-
-- **Backend:** Laravel 12
-- **Frontend:** Blade Templates + Tailwind CSS 4
-- **JavaScript:** Alpine.js
+- **Backend:** [Laravel 12.x](https://laravel.com/) (PHP 8.2+)
+- **Frontend:** [Blade Templates](https://laravel.com/docs/12.x/blade), [TailwindCSS 4](https://tailwindcss.com/), [Alpine.js](https://alpinejs.dev/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
 - **Database:** MySQL / SQLite
-- **Build Tool:** Vite
+- **Package Tambahan:**
+  - `maatwebsite/excel` (Export Laporan)
+  - `blade-ui-kit/blade-icons` (Ikonografi)
+  - `owenvoke/blade-fontawesome` (FontAwesome integration)
 
-## 📝 Alur Penggunaan
+---
 
-### 1. Pendaftaran Murid Baru
-```
-Murid mengisi form → Upload bukti bayar → Status: "Menunggu Verifikasi"
-```
+## 5. Arsitektur Sistem
 
-### 2. Verifikasi oleh Admin
-```
-Admin cek bukti bayar → Verifikasi Berhasil → Admin buat akun → Admin masukkan ke kelas
-```
+Aplikasi ini menggunakan pola arsitektur **MVC (Model-View-Controller)** standar Laravel:
+- **Models:** Mengelola logika data dan relasi antar tabel (Users, Classes, Quizzes, dll).
+- **Views:** Menggunakan Blade engine dengan komponen TailwindCSS untuk UI yang konsisten.
+- **Controllers:** Menangani logika bisnis untuk masing-masing role (AdminController, GuruController, MuridController).
+- **Middleware:** `RoleMiddleware` digunakan untuk memastikan keamanan akses berdasarkan role pengguna.
 
-### 3. Proses Belajar-Mengajar
-```
-Guru buat Pertemuan → Upload Materi → Buat Kuis/Tugas → Tentukan Label Skill
-Murid login → Masuk Kelas → Belajar → Kerjakan Kuis → Upload Tugas
-```
+---
 
-### 4. Penilaian
-```
-Guru nilai tugas manual → Nilai kuis otomatis → Tersimpan per Label Skill
-```
+## 6. Instalasi dan Menjalankan Proyek
 
-### 5. Sertifikasi
-```
-Guru generate sertifikat → Sistem hitung rata-rata per skill → Cetak PDF 2 layer
-```
+Pastikan Anda sudah menginstal **PHP >= 8.2**, **Composer**, dan **Node.js** di sistem Anda.
 
-## 🔐 Keamanan
+### Langkah-langkah:
 
-- Password di-hash menggunakan bcrypt
-- Middleware role-based access control
-- CSRF protection
-- File upload validation
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/username/nama-repo.git
+   cd nama-repo
+   ```
 
-## 📄 License
+2. **Install Dependency**
+   ```bash
+   composer install
+   npm install
+   ```
 
-MIT License
+3. **Konfigurasi Environment**
+   Salin file `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Lalu sesuaikan konfigurasi database di file `.env`.
 
-## 👥 Developer
+4. **Generate App Key**
+   ```bash
+   php artisan key:generate
+   ```
 
-Dibuat dengan ❤️ untuk LMS Bahasa
+5. **Migrasi dan Seeder**
+   Jalankan migrasi database beserta data awal (opsional):
+   ```bash
+   php artisan migrate --seed
+   ```
+
+6. **Jalankan Aplikasi**
+   Gunakan perintah berikut untuk menjalankan server development dan Vite secara bersamaan:
+   ```bash
+   npm run dev
+   ```
+   Aplikasi akan berjalan di `http://localhost:8000`.
+
+---
+
+## 7. Penggunaan Sistem
+
+### Login Default (Jika menggunakan Seeder)
+- **Admin:** `admin@example.com` / `password`
+- **Guru:** `guru@example.com` / `password`
+- **Murid:** `murid@example.com` / `password`
+
+### Alur Kerja Umum:
+1. **Calon Murid** melakukan registrasi melalui halaman `/register`.
+2. **Admin** memverifikasi pendaftaran dan membuatkan akun user.
+3. **Admin** memasukkan murid ke dalam kelas yang sesuai.
+4. **Guru** mengisi materi, kuis, dan tugas di dalam kelas tersebut.
+5. **Murid** mengakses materi dan mengerjakan tugas/kuis.
+6. **Guru** memberikan penilaian dan sertifikat di akhir kursus.
+
+---
+
+## 8. API Documentation (Placeholder)
+
+Saat ini sistem fokus pada aplikasi web berbasis Blade. Namun, beberapa endpoint internal yang tersedia antara lain:
+
+- `POST /api/login` – Autentikasi pengguna.
+- `GET /murid/quizzes/{quiz}/deadline` – Mengecek batas waktu kuis.
+- `POST /murid/notifications/{announcement}/read` – Menandai pengumuman telah dibaca.
+
+---
+
+## Lisensi
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).

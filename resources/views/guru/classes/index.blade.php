@@ -11,7 +11,7 @@
     @if($classes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($classes as $class)
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-start justify-between mb-4">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ $class->nama_kelas }}</h3>
@@ -47,7 +47,7 @@
                     </div>
 
                     <a href="{{ route('guru.classes.show', $class) }}"
-                       class="block text-center bg-blue-500 text-gray-100 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                       class="block text-center bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
                         Kelola Kelas
                     </a>
                 </div>

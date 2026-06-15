@@ -10,74 +10,72 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         
-        <div class="rounded-xl shadow-lg p-6" style="background-color: #1e40af !important; color: white !important;">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <p style="color: #dbeafe !important;" class="text-xs font-bold uppercase mb-1">Total Kelas</p>
-                    <p class="text-4xl font-extrabold">{{ $totalClasses }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Kelas</p>
+                    <p class="text-3xl font-bold text-blue-600 mt-1">{{ $totalClasses }}</p>
                 </div>
-                <div style="background-color: rgba(255,255,255,0.2) !important;" class="p-3 rounded-lg">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-4 rounded-full bg-blue-100 dark:bg-blue-900/50">
+                    <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-white/20">
-                <a href="{{ route('guru.classes.index') }}" style="color: white !important;" class="text-sm font-bold hover:underline flex items-center gap-1">
-                    Lihat semua →
-                </a>
-            </div>
+            <a href="{{ route('guru.classes.index') }}" class="mt-4 block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                Lihat semua →
+            </a>
         </div>
 
-        <div class="rounded-xl shadow-lg p-6" style="background-color: #6d28d9 !important; color: white !important;">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <p style="color: #ede9fe !important;" class="text-xs font-bold uppercase mb-1">Total Murid</p>
-                    <p class="text-4xl font-extrabold">{{ $totalStudents }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Murid</p>
+                    <p class="text-3xl font-bold text-green-600 mt-1">{{ $totalStudents }}</p>
                 </div>
-                <div style="background-color: rgba(255,255,255,0.2) !important;" class="p-3 rounded-lg">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-4 rounded-full bg-green-100 dark:bg-green-900/50">
+                    <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-white/20 text-sm font-medium">
+            <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 Aktif di semua kelas
             </div>
         </div>
 
-        <div class="rounded-xl shadow-lg p-6" style="background-color: #ea580c !important; color: white !important;">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <p style="color: #ffedd5 !important;" class="text-xs font-bold uppercase mb-1">Perlu Dinilai</p>
-                    <p class="text-4xl font-extrabold">{{ $ungradedAssignments }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Perlu Dinilai</p>
+                    <p class="text-3xl font-bold text-orange-600 mt-1">{{ $ungradedAssignments }}</p>
                 </div>
-                <div style="background-color: rgba(255,255,255,0.2) !important;" class="p-3 rounded-lg">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-4 rounded-full bg-orange-100 dark:bg-orange-900/50">
+                    <svg class="w-8 h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-white/20">
-                <span style="background-color: rgba(0,0,0,0.2) !important;" class="text-xs font-black px-2 py-1 rounded">
+            <div class="mt-4">
+                <span class="text-xs font-bold px-2 py-1 rounded {{ $ungradedAssignments > 0 ? 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300' : 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300' }}">
                     {{ $ungradedAssignments > 0 ? '⚠️ PERIKSA SEKARANG' : '✓ BERSIH' }}
                 </span>
             </div>
         </div>
 
-        <div class="rounded-xl shadow-lg p-6" style="background-color: #be123c !important; color: white !important;">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <p style="color: #ffe4e6 !important;" class="text-xs font-bold uppercase mb-1">Kuis Menunggu</p>
-                    <p class="text-4xl font-extrabold">{{ $incompleteQuizzes }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Kuis Menunggu</p>
+                    <p class="text-3xl font-bold text-purple-600 mt-1">{{ $incompleteQuizzes }}</p>
                 </div>
-                <div style="background-color: rgba(255,255,255,0.2) !important;" class="p-3 rounded-lg">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-4 rounded-full bg-purple-100 dark:bg-purple-900/50">
+                    <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-white/20 text-sm font-medium">
+            <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 Pengerjaan sedang berjalan
             </div>
         </div>
@@ -99,7 +97,7 @@
                 @if($activeClasses->count() > 0)
                     <div class="space-y-4">
                         @foreach($activeClasses->take(5) as $class)
-                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition">
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-4 flex-1">
                                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">
@@ -150,7 +148,7 @@
                 @if($recentSubmissions->count() > 0)
                     <div class="space-y-3">
                         @foreach($recentSubmissions as $submission)
-                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <div class="flex items-start justify-between mb-2">
                                     <div class="flex-1">
                                         <p class="font-medium text-gray-800 dark:text-white text-sm">{{ $submission->student->nama_lengkap }}</p>

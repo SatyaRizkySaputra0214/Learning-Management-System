@@ -10,7 +10,7 @@
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Tambah Kelas Baru</h1>
     </div>
 
-    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <form method="POST" action="{{ route('admin.classes.store') }}" class="space-y-6">
             @csrf
             
@@ -100,11 +100,11 @@
             </div>
 
             <div class="flex gap-4 pt-4">
-                <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium !important" style="background-color: #16a34a !important; color: #ffffff !important;">
+                <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition">
                     ✓ Simpan Kelas
                 </button>
                 <a href="{{ route('admin.classes.index') }}"
-                   class="bg-red-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-red-600 transition font-medium text-center !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                     Batal
                 </a>
             </div>

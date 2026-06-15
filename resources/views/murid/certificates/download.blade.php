@@ -53,25 +53,22 @@
             background: linear-gradient(135deg, #f0f4ff 0%, #e6e9ff 100%);
         }
         
-        .trophy {
-            font-size: 80px;
-            color: #FFD700;
+        .logo {
             margin-bottom: 20px;
+        }
+        
+        .logo img {
+            width: 100px;
+            height: auto;
         }
         
         .title {
             font-size: 32pt;
             font-weight: bold;
             color: #1a1a1a;
-            margin-bottom: 10px;
+            margin-bottom: 50px;
             text-transform: uppercase;
             letter-spacing: 3px;
-        }
-        
-        .subtitle {
-            font-size: 16pt;
-            color: #666;
-            margin-bottom: 40px;
         }
         
         .divider {
@@ -251,10 +248,9 @@
 <body>
     <!-- Halaman 1: Depan (Kelulusan) -->
     <div class="certificate-page front-page">
-        <div class="trophy">🏆</div>
+        <div class="logo"><img src="{{ asset('Logo.png') }}" alt=""></div>
         
         <h1 class="title">Sertifikat Kelulusan</h1>
-        <p class="subtitle">LMS Bahasa</p>
         
         <div class="divider"></div>
         

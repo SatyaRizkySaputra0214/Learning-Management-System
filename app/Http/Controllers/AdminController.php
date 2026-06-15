@@ -6,6 +6,10 @@ use App\Models\Registration;
 use App\Models\User;
 use App\Models\ClassModel;
 use App\Models\Course;
+use App\Models\Skill;
+use App\Models\Attendance;
+use App\Models\QuizScore;
+use App\Models\AssignmentSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -83,10 +87,16 @@ class AdminController extends Controller
 
     public function verifyRegistration(Request $request, Registration $registration)
     {
-        $validated = $request->validate([
+        $rules = [
             'status' => 'required|in:verified,rejected',
             'admin_notes' => 'nullable|string|max:500',
-        ]);
+        ];
+
+        if ($request->status === 'rejected') {
+            $rules['admin_notes'] = 'required|string|max:500';
+        }
+
+        $validated = $request->validate($rules);
 
         $registration->update([
             'status' => $validated['status'],
@@ -107,7 +117,9 @@ class AdminController extends Controller
             return back()->with('error', 'User sudah dibuat untuk registrasi ini.');
         }
 
-        $courses = Course::all();
+        $courses = Course::with(['classes' => function($q) {
+            $q->where('status', 'aktif');
+        }])->get();
         return view('admin.registrations.create-user', compact('registration', 'courses'));
     }
 
@@ -117,7 +129,18 @@ class AdminController extends Controller
             'username' => 'required|unique:users,username',
             'password' => ['required', 'confirmed', Password::defaults()],
             'role' => 'required|in:admin,guru,murid',
-            'id_class' => 'nullable|exists:classes,id',
+            'id_class' => [
+                'nullable',
+                'exists:classes,id',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $class = ClassModel::find($value);
+                        if ($class && $class->status !== 'aktif') {
+                            $fail('Kelas yang dipilih sudah selesai/tidak aktif.');
+                        }
+                    }
+                },
+            ],
         ]);
 
         $user = User::create([
@@ -181,7 +204,7 @@ class AdminController extends Controller
         }
 
         $users = $query->orderBy('nama_lengkap')->paginate(10)->withQueryString();
-        $title = 'Manajemen Guru';
+        $title = 'kelola guru';
         $subtitle = 'Kelola akun pengajar / guru';
         $role = 'guru';
         
@@ -210,7 +233,7 @@ class AdminController extends Controller
 
         $users = $query->orderBy('nama_lengkap')->paginate(10)->withQueryString();
         $courses = Course::all();
-        $title = 'Manajemen Murid';
+        $title = 'kelola murid';
         $subtitle = 'Kelola akun siswa / murid';
         $role = 'murid';
         
@@ -259,7 +282,18 @@ class AdminController extends Controller
             'role' => 'required|in:admin,guru,murid',
             'tingkat_bahasa' => 'nullable|string|max:50',
             'password' => ['required', 'confirmed', 'min:8'],
-            'id_class' => 'nullable|exists:classes,id',
+            'id_class' => [
+                'nullable',
+                'exists:classes,id',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $class = ClassModel::find($value);
+                        if ($class && $class->status !== 'aktif') {
+                            $fail('Kelas yang dipilih sudah selesai/tidak aktif.');
+                        }
+                    }
+                },
+            ],
         ]);
 
         $user = User::create([
@@ -306,14 +340,28 @@ class AdminController extends Controller
             'role' => 'required|in:admin,guru,murid',
             'tingkat_bahasa' => 'nullable|string|max:50',
             'password' => 'nullable|min:8|confirmed',
-            'id_class' => 'nullable|exists:classes,id',
+            'id_class' => [
+                'nullable',
+                'exists:classes,id',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $class = ClassModel::find($value);
+                        if ($class && $class->status !== 'aktif') {
+                            $fail('Kelas yang dipilih sudah selesai/tidak aktif.');
+                        }
+                    }
+                },
+            ],
         ]);
 
         $user->nama_lengkap = $validated['nama_lengkap'];
         $user->username = $validated['username'];
         $user->email = $validated['email'];
         $user->role = $validated['role'];
-        $user->tingkat_bahasa = $validated['tingkat_bahasa'];
+
+        if ($request->has('tingkat_bahasa')) {
+            $user->tingkat_bahasa = $validated['tingkat_bahasa'];
+        }
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -444,7 +492,16 @@ class AdminController extends Controller
             'jumlah_hari' => 'required|integer|min:1|max:100',
         ]);
 
-        ClassModel::create($validated);
+        $class = ClassModel::create($validated);
+
+        $jumlahPertemuan = $validated['jumlah_hari'];
+        for ($i = 1; $i <= $jumlahPertemuan; $i++) {
+            $class->meetings()->create([
+                'urutan_pertemuan' => $i,
+                'judul_pertemuan' => "Pertemuan $i",
+                'deskripsi' => null,
+            ]);
+        }
 
         return redirect()->route('admin.classes.index')->with('success', 'Kelas berhasil dibuat.');
     }
@@ -488,6 +545,11 @@ class AdminController extends Controller
         ]);
 
         $class = ClassModel::findOrFail($validated['id_class']);
+
+        if ($class->status !== 'aktif') {
+            return back()->with('error', 'Tidak dapat menambahkan murid ke kelas yang sudah selesai.');
+        }
+
         $students = User::whereIn('id', $validated['student_ids'])->where('role', 'murid')->get();
 
         foreach ($students as $student) {
@@ -497,5 +559,159 @@ class AdminController extends Controller
         }
 
         return back()->with('success', 'Murid berhasil dimasukkan ke kelas.');
+    }
+
+    public function monitoringIndex(Request $request)
+    {
+        $courses = Course::all();
+        $gurus = User::where('role', 'guru')->get();
+        $tingkatList = User::where('role', 'murid')
+            ->whereNotNull('tingkat_bahasa')
+            ->distinct()
+            ->orderBy('tingkat_bahasa')
+            ->pluck('tingkat_bahasa');
+
+        $allClasses = ClassModel::with(['course', 'guru'])
+            ->where('status', 'aktif')
+            ->orderBy('nama_kelas')
+            ->get();
+
+        $allClassesJson = $allClasses->map(function ($c) {
+            return [
+                'id' => $c->id,
+                'id_course' => $c->id_course,
+                'id_guru' => $c->id_guru,
+                'nama_kelas' => $c->nama_kelas,
+                'course' => ['nama_bahasa' => $c->course->nama_bahasa],
+            ];
+        })->values();
+
+        $selectedClass = null;
+        $students = collect();
+        $classStats = null;
+
+        if ($request->filled('class_id')) {
+            $selectedClass = ClassModel::with(['course', 'guru', 'students', 'meetings'])->findOrFail($request->class_id);
+
+            $tempStudents = [];
+            foreach ($selectedClass->students as $student) {
+                if ($request->filled('tingkat') && $student->tingkat_bahasa !== $request->tingkat) {
+                    continue;
+                }
+
+                $totalMeetings = $selectedClass->meetings->count();
+
+                $attendanceRecords = Attendance::whereIn('id_meeting', $selectedClass->meetings->pluck('id'))
+                    ->where('id_student', $student->id)
+                    ->get();
+
+                $hadir = $attendanceRecords->where('status', 'hadir')->count();
+                $tidakHadir = $totalMeetings - $hadir;
+                $persentaseKehadiran = $totalMeetings > 0 ? round(($hadir / $totalMeetings) * 100, 1) : 0;
+
+                $grades = $selectedClass->getStudentGrades($student);
+                $averageGrade = $grades['average'];
+
+                if ($persentaseKehadiran >= 90 && $averageGrade !== null && $averageGrade >= 85) {
+                    $status = 'Sangat Baik';
+                } elseif ($persentaseKehadiran >= 75 && $averageGrade !== null && $averageGrade >= 70) {
+                    $status = 'Baik';
+                } else {
+                    $status = 'Perlu Perhatian';
+                }
+
+                $tempStudents[] = [
+                    'student' => $student,
+                    'total_meetings' => $totalMeetings,
+                    'hadir' => $hadir,
+                    'tidak_hadir' => $tidakHadir,
+                    'persentase_kehadiran' => $persentaseKehadiran,
+                    'average_grade' => $averageGrade,
+                    'status' => $status,
+                ];
+            }
+            $students = collect($tempStudents);
+
+            $totalStudents = $students->count();
+            $avgGradeClass = $totalStudents > 0 ? round($students->avg('average_grade'), 1) : 0;
+            $avgKehadiran = $totalStudents > 0 ? round($students->avg('persentase_kehadiran'), 1) : 0;
+            $bermasalah = $students->filter(function ($s) {
+                return $s['persentase_kehadiran'] < 75 || ($s['average_grade'] !== null && $s['average_grade'] < 70);
+            })->count();
+
+            $classStats = compact('totalStudents', 'avgGradeClass', 'avgKehadiran', 'bermasalah');
+        }
+
+        return view('admin.monitoring.index', compact(
+            'courses', 'gurus', 'tingkatList', 'allClasses', 'allClassesJson',
+            'selectedClass', 'students', 'classStats'
+        ));
+    }
+
+    public function monitoringStudentDetail(ClassModel $class, User $student)
+    {
+        if (!$class->students->contains($student)) {
+            abort(403, 'Student tidak terdaftar di kelas ini.');
+        }
+
+        $class->load(['meetings' => function ($q) {
+            $q->with(['quizzes.skill', 'assignments.skill', 'attendances']);
+        }, 'course', 'guru']);
+
+        $grades = $class->getStudentGrades($student);
+
+        $meetingIds = $class->meetings()->pluck('id');
+
+        $quizScores = QuizScore::whereIn('id_quiz', function ($query) use ($meetingIds) {
+            $query->select('id')->from('quizzes')->whereIn('id_meeting', $meetingIds);
+        })
+            ->where('id_student', $student->id)
+            ->whereNotNull('skor')
+            ->with(['quiz.meeting', 'quiz.skill'])
+            ->get();
+
+        $assignmentSubmissions = AssignmentSubmission::whereIn('id_assignment', function ($query) use ($meetingIds) {
+            $query->select('id')->from('assignments')->whereIn('id_meeting', $meetingIds);
+        })
+            ->where('id_student', $student->id)
+            ->whereNotNull('nilai_guru')
+            ->with(['assignment.meeting', 'assignment.skill'])
+            ->get();
+
+        $attendance = Attendance::whereIn('id_meeting', $meetingIds)
+            ->where('id_student', $student->id)
+            ->get();
+
+        $skills = Skill::all();
+
+        $allQuizzesWithScores = [];
+        $allAssignmentsWithScores = [];
+
+        foreach ($class->meetings as $meeting) {
+            foreach ($meeting->quizzes as $quiz) {
+                $score = $quizScores->firstWhere('id_quiz', $quiz->id);
+                $allQuizzesWithScores[] = [
+                    'quiz' => $quiz,
+                    'meeting' => $meeting,
+                    'score' => $score ? $score->skor : 0,
+                    'completed' => $score !== null,
+                ];
+            }
+
+            foreach ($meeting->assignments as $assignment) {
+                $submission = $assignmentSubmissions->firstWhere('id_assignment', $assignment->id);
+                $allAssignmentsWithScores[] = [
+                    'assignment' => $assignment,
+                    'meeting' => $meeting,
+                    'score' => $submission ? $submission->nilai_guru : 0,
+                    'completed' => $submission !== null,
+                ];
+            }
+        }
+
+        return view('admin.monitoring.student-detail', compact(
+            'student', 'class', 'grades', 'allQuizzesWithScores',
+            'allAssignmentsWithScores', 'skills', 'attendance'
+        ));
     }
 }

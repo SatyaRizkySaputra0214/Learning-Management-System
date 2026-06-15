@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="w-full max-w-md">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 border border-gray-200 dark:border-gray-700">
         <div class="text-center mb-8">
             <div class="flex items-center justify-center mx-auto mb-4">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="w-20 h-20 object-contain">
@@ -54,7 +54,7 @@
             </div>
 
             <button type="submit" 
-                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                    class="w-full inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200">
                 Login
             </button>
         </form>

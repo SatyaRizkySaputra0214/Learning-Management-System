@@ -25,7 +25,7 @@
                 </div>
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $title }}</h3>
             </div>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">
+            <p class="text-gray-600 dark:text-gray-300 mb-6 break-words" style="word-break: break-word; overflow-wrap: break-word; white-space: normal; max-width: 100%;">
                 {!! $message !!}
                 <br>
                 <span class="text-sm text-gray-500 dark:text-gray-400">Tindakan ini tidak dapat dibatalkan.</span>

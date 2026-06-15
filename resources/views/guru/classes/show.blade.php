@@ -7,27 +7,7 @@
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ $class->nama_kelas }}</h1>
         <p class="text-gray-500 dark:text-gray-400 mt-1">{{ $class->course->nama_bahasa }} - {{ $class->periode }}</p>
 
-        @if(session('success'))
-            <div class="mt-4 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 p-4 rounded-md">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="text-green-700 dark:text-green-300">{{ session('success') }}</span>
-                </div>
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="mt-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-md">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="text-red-700 dark:text-red-300">{{ session('error') }}</span>
-                </div>
-            </div>
-        @endif
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -37,7 +17,7 @@
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Daftar Pertemuan</h2>
                     <a href="{{ route('guru.meetings.create', $class) }}"
-                       class="inline-flex items-center gap-2 bg-blue-500 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium shadow-sm hover:shadow !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                       class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition text-sm font-medium shadow-sm">
                         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -127,7 +107,7 @@
                                             </p>
                                             <div class="flex flex-wrap gap-2.5">
                                                 <a href="{{ route('guru.announcements.create', $meeting) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-yellow-500 text-gray-100 text-xs font-medium rounded-lg hover:bg-yellow-600 transition shadow-sm hover:shadow !important" style="background-color: #eab308 !important; color: #f3f4f6 !important;">
+                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-yellow-500 text-white text-xs font-medium rounded-lg hover:bg-yellow-600 transition shadow-sm hover:shadow">
                                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
                                                     </svg>
@@ -135,7 +115,7 @@
                                                 </a>
 
                                                 <a href="{{ route('guru.attendance.index', $meeting) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-indigo-500 text-gray-100 text-xs font-medium rounded-lg hover:bg-indigo-600 transition shadow-sm hover:shadow !important" style="background-color: #6366f1 !important; color: #f3f4f6 !important;">
+                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-indigo-500 text-white text-xs font-medium rounded-lg hover:bg-indigo-600 transition shadow-sm hover:shadow">
                                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                                                     </svg>
@@ -143,15 +123,15 @@
                                                 </a>
 
                                                 <a href="{{ route('guru.materials.create', $meeting) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-500 text-gray-100 text-xs font-medium rounded-lg hover:bg-blue-600 transition shadow-sm hover:shadow !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
-                                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m4-8l-4-4m0 0L8 8m4-4v12"/>
+                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition shadow-sm hover:shadow">
+                                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
                                                     </svg>
                                                     Upload Materi
                                                 </a>
 
                                                 <a href="{{ route('guru.quizzes.create', $meeting) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-green-500 text-gray-100 text-xs font-medium rounded-lg hover:bg-green-600 transition shadow-sm hover:shadow !important" style="background-color: #22c55e !important; color: #f3f4f6 !important;">
+                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 transition shadow-sm hover:shadow">
                                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                                                     </svg>
@@ -159,7 +139,7 @@
                                                 </a>
 
                                                 <a href="{{ route('guru.assignments.create', $meeting) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-purple-500 text-gray-100 text-xs font-medium rounded-lg hover:bg-purple-600 transition shadow-sm hover:shadow !important" style="background-color: #a855f7 !important; color: #f3f4f6 !important;">
+                                                   class="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-purple-700 transition shadow-sm hover:shadow">
                                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                                     </svg>
@@ -203,22 +183,22 @@
                                                             Kuis
                                                         </p>
                                                         <div class="flex flex-wrap gap-2">
-                                                            @foreach($meeting->quizzes as $quiz)
-                                                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 text-xs font-medium rounded-full border border-green-200/60 dark:border-green-800/50 shadow-sm hover:bg-green-100 dark:hover:bg-green-900/30 transition">
-                                                                    <a href="{{ route('guru.quizzes.edit', $quiz) }}" class="hover:underline">
-                                                                        {{ $quiz->judul_kuis }}
-                                                                    </a>
-                                                                    <x-confirm-modal
-                                                                        action="{{ route('guru.quizzes.delete', $quiz) }}"
-                                                                        title="Hapus Kuis"
-                                                                        message="Hapus kuis <strong>{{ $quiz->judul_kuis }}</strong>?"
-                                                                    >
-                                                                        <x-slot name="trigger">
-                                                                            <button type="button" class="text-green-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full p-0.5 transition-colors">×</button>
-                                                                        </x-slot>
-                                                                    </x-confirm-modal>
-                                                                </span>
-                                                            @endforeach
+                                                @foreach($meeting->quizzes as $quiz)
+                                                                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 text-xs font-medium rounded-full border border-green-200/60 dark:border-green-800/50 shadow-sm hover:bg-green-100 dark:hover:bg-green-900/30 transition">
+                                                                     <a href="{{ route('guru.quizzes.edit', $quiz) }}" class="hover:underline">
+                                                                         {{ $quiz->judul_kuis }}
+                                                                     </a>
+                                                                     <x-confirm-modal
+                                                                         action="{{ route('guru.quizzes.delete', $quiz) }}"
+                                                                         title="Hapus Kuis"
+                                                                         message="Hapus kuis <strong>{{ $quiz->judul_kuis }}</strong>?"
+                                                                     >
+                                                                         <x-slot name="trigger">
+                                                                             <button type="button" class="text-green-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full p-0.5 transition-colors">×</button>
+                                                                         </x-slot>
+                                                                     </x-confirm-modal>
+                                                                 </span>
+                                                             @endforeach
                                                         </div>
                                                     </div>
                                                 @endif
@@ -309,7 +289,7 @@
                         <p class="mt-2 text-gray-500 dark:text-gray-400">Mulai dengan menambahkan pertemuan pertama Anda.</p>
                         <div class="mt-6">
                             <a href="{{ route('guru.meetings.create', $class) }}"
-                               class="inline-flex items-center gap-2 bg-blue-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-blue-600 transition font-medium shadow-sm hover:shadow !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                               class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium shadow-sm hover:shadow">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
@@ -385,7 +365,7 @@
 
                     <div class="mt-5 pt-5 border-t border-gray-200 dark:border-gray-700">
                         <a href="{{ route('guru.certificates.index', $class) }}"
-                           class="block w-full bg-yellow-500 text-gray-100 text-center py-2.5 px-4 rounded-xl hover:bg-yellow-600 transition font-semibold shadow-sm hover:shadow-md !important" style="background-color: #eab308 !important; color: #f3f4f6 !important;">
+                           class="block w-full text-center py-2.5 px-4 text-sm font-semibold text-white bg-yellow-500 rounded-xl hover:bg-yellow-600 transition shadow-sm">
                             Kelola Sertifikat Kelas
                         </a>
                     </div>

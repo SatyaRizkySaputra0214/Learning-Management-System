@@ -5,7 +5,16 @@
 
     <div class="mb-6">
         <a href="{{ route('guru.classes.show', $quiz->meeting->class) }}" class="text-blue-600 dark:text-blue-400 hover:underline text-sm mb-4 inline-block">← Kembali ke Kelas</a>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Edit Kuis</h1>
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Edit Kuis</h1>
+            <a href="{{ route('guru.quizzes.results', $quiz) }}"
+               class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Lihat Hasil Kuis
+            </a>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -51,7 +60,7 @@
                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
                     </div>
-                    <button type="submit" class="bg-blue-500 text-gray-100 px-6 py-2 rounded-lg hover:bg-blue-600 transition !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">Update Kuis</button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">Update Kuis</button>
                 </form>
             </div>
 
@@ -82,7 +91,7 @@
                                         </x-confirm-modal>
                                     </div>
                                 </div>
-                                <p class="font-medium text-gray-800 dark:text-white mb-3">{{ $question->soal }}</p>
+                                <p class="font-medium text-gray-800 dark:text-white mb-3 whitespace-pre-wrap">{{ str_replace('[[NEWLINE]]', "\n", $question->soal) }}</p>
                                 <div class="grid grid-cols-2 gap-2 text-sm">
                                     <span class="{{ $question->kunci_jawaban === 'A' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 font-semibold px-2 py-1 rounded' : 'text-gray-600 dark:text-gray-400' }}">A. {{ $question->opsi_a }}</span>
                                     <span class="{{ $question->kunci_jawaban === 'B' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 font-semibold px-2 py-1 rounded' : 'text-gray-600 dark:text-gray-400' }}">B. {{ $question->opsi_b }}</span>
@@ -133,7 +142,7 @@
                             <option value="D">D</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-blue-500 text-gray-100 py-2 rounded-lg hover:bg-blue-600 transition font-medium !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">Tambah Soal</button>
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">Tambah Soal</button>
                 </form>
             </div>
         </div>

@@ -16,6 +16,7 @@ class Registration extends Model
         'kursus_pilihan',
         'tingkat_bahasa',
         'bukti_bayar_url',
+        'bukti_kemampuan_dasar',
         'status',
         'admin_notes',
         'verified_by',
@@ -30,6 +31,18 @@ class Registration extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function isBuktiKemampuanRequired(): bool
+    {
+        $kursus = $this->kursus_pilihan;
+        $tingkat = $this->tingkat_bahasa;
+
+        if ($kursus === 'eng' && in_array($tingkat, ['A2', 'B1'])) return true;
+        if ($kursus === 'kor' && $tingkat === 'Intermediate') return true;
+        if ($kursus === 'th' && $tingkat === 'Intermediate') return true;
+
+        return false;
     }
 
     public function getKursusLabelAttribute(): string

@@ -1,36 +1,63 @@
 <x-layouts.lms>
     <x-slot name="sidebar">
-        @include('layouts.sidebar-guru')
+        @include('layouts.sidebar-admin')
     </x-slot>
 
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Detail Nilai Murid</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Detail Monitoring Murid</h1>
                 <p class="text-gray-500 dark:text-gray-400 mt-1">{{ $student->nama_lengkap }} - {{ $class->nama_kelas }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('guru.grades.summary', $class) }}"
+                <a href="{{ route('admin.monitoring.index', request()->only(['course', 'tingkat', 'class_id', 'guru_id'])) }}"
                    class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
-                    Kembali ke Rekap
-                </a>
-                <a href="{{ route('guru.classes.show', $class) }}"
-                   class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    Kelas
+                    Kembali ke Monitoring
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Rata-rata Nilai Keseluruhan Per Skill -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Kelas</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-1">{{ $class->nama_kelas }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Bahasa</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-1">{{ $class->course->nama_bahasa }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Tingkat</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-1">{{ $student->tingkat_bahasa ?? '-' }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Guru</p>
+                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-1">{{ $class->guru->nama_lengkap }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Rata-rata Nilai Keseluruhan Per Skill</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Rata-rata Nilai Per Skill</h3>
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             @foreach($skills as $skill)
                 @php
@@ -55,10 +82,9 @@
         </div>
     </div>
 
-    <!-- Tabel Nilai Per Pertemuan -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Nilai Per Pertemuan</h3>
-        
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Riwayat Kehadiran & Nilai Per Pertemuan</h3>
+
         @if($class->meetings->count() > 0)
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -159,20 +185,25 @@
         @endif
     </div>
 
-    <!-- Ringkasan Progres -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Ringkasan Progres</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             @php
                 $completedQuizzes = collect($allQuizzesWithScores)->filter(function($q) {
                     return $q['completed'];
                 })->count();
                 $totalQuizzes = count($allQuizzesWithScores);
-                
                 $completedAssignments = collect($allAssignmentsWithScores)->filter(function($a) {
                     return $a['completed'];
                 })->count();
                 $totalAssignments = count($allAssignmentsWithScores);
+
+                $totalHadir = $attendance->where('status', 'hadir')->count();
+                $totalIzin = $attendance->where('status', 'izin')->count();
+                $totalSakit = $attendance->where('status', 'sakit')->count();
+                $totalAlfa = $attendance->where('status', 'alfa')->count();
+                $totalPertemuan = $class->meetings->count();
+                $persentaseHadir = $totalPertemuan > 0 ? round(($totalHadir / $totalPertemuan) * 100, 1) : 0;
             @endphp
             <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $completedQuizzes }}/{{ $totalQuizzes }}</div>
@@ -183,10 +214,8 @@
                 <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Tugas Dinilai</div>
             </div>
             <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {{ $attendance->where('status', 'hadir')->count() }}/{{ $class->meetings->count() }}
-                </div>
-                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Kehadiran</div>
+                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $totalHadir }}/{{ $totalPertemuan }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Hadir</div>
             </div>
             <div class="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
                 <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
@@ -196,7 +225,42 @@
                         0
                     @endif
                 </div>
-                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Rata-rata Keseluruhan</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Nilai Rata-rata</div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Detail Kehadiran</h4>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div class="text-lg font-bold text-green-600 dark:text-green-400">{{ $totalHadir }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Hadir</div>
+                </div>
+                <div class="text-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                    <div class="text-lg font-bold text-yellow-600 dark:text-yellow-400">{{ $totalIzin }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Izin</div>
+                </div>
+                <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ $totalSakit }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Sakit</div>
+                </div>
+                <div class="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <div class="text-lg font-bold text-red-600 dark:text-red-400">{{ $totalAlfa }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Alfa</div>
+                </div>
+                <div class="text-center p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <div class="text-lg font-bold text-gray-800 dark:text-white">{{ $totalPertemuan - ($totalHadir + $totalIzin + $totalSakit + $totalAlfa) }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Belum Dicatat</div>
+                </div>
+            </div>
+            <div class="mt-3 text-center">
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                    Persentase Kehadiran: <strong class="text-gray-800 dark:text-white {{ $persentaseHadir >= 75 ? 'text-green-600' : 'text-red-600' }}">{{ $persentaseHadir }}%</strong>
+                </span>
+                <span class="mx-2">|</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                    Total Tidak Hadir: <strong class="text-red-600 dark:text-red-400">{{ $totalPertemuan - $totalHadir }}</strong>
+                </span>
             </div>
         </div>
     </div>

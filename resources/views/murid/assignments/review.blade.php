@@ -11,7 +11,7 @@
 
     <div class="max-w-4xl space-y-6">
         {{-- Status Pengumpulan --}}
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
                     <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -50,7 +50,7 @@
         </div>
 
         {{-- File Jawaban --}}
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -58,7 +58,7 @@
                 File Jawaban
             </h2>
 
-            <a href="{{ Storage::url($submission->file_url) }}" target="_blank"
+            <a href="{{ route('murid.assignment.file', $submission) }}" target="_blank"
                class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
                 <svg class="w-8 h-8 text-gray-600 dark:text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -75,7 +75,7 @@
 
         {{-- Catatan Siswa --}}
         @if($submission->catatan_siswa)
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -89,7 +89,7 @@
         @endif
 
         {{-- Deskripsi Tugas --}}
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 p-6">
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 p-6">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Deskripsi Tugas</h2>
             <p class="text-gray-700 dark:text-gray-300">{!! nl2br(e($assignment->deskripsi)) !!}</p>
         </div>
@@ -102,6 +102,17 @@
                 </a>
             @endif
 
+            @if(!$submission->nilai_guru)
+                <form action="{{ route('murid.assignment.delete', $assignment) }}" method="POST"
+                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus jawaban tugas ini? Tindakan ini tidak dapat dibatalkan.')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition font-medium">
+                          Hapus Jawaban
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 </x-layouts.lms>

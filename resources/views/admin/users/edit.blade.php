@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="max-w-3xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="max-w-3xl bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-6">
             @csrf
             @method('PUT')
@@ -136,7 +136,7 @@
                     
                     <div class="space-y-6">
                         <!-- Enrollment Card -->
-                        <div class="bg-gray-50 dark:bg-gray-900/30 rounded-2xl border border-gray-200 dark:border-gray-700/50 p-5">
+                        <div class="bg-gray-50 dark:bg-gray-900/30 rounded-xl border border-gray-200 dark:border-gray-700/50 p-5">
                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                                 Kelas Bahasa Saat Ini
                             </label>

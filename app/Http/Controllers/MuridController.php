@@ -212,20 +212,11 @@ class MuridController extends Controller
 
         $classAverages = [];
         foreach ($classes as $class) {
-            $totalSkor = 0;
-            $totalCount = 0;
+            $grades = $class->getStudentGrades($user);
             $hadirCount = 0;
             $totalAttendance = 0;
 
             foreach ($class->meetings as $meeting) {
-                foreach ($meeting->quiz_scores as $score) {
-                    $totalSkor += $score->skor;
-                    $totalCount++;
-                }
-                foreach ($meeting->assignment_scores as $submission) {
-                    $totalSkor += $submission->nilai_guru;
-                    $totalCount++;
-                }
                 if ($meeting->attendance) {
                     $totalAttendance++;
                     if (in_array(strtolower($meeting->attendance->status), ['present', 'hadir'])) {
@@ -235,7 +226,7 @@ class MuridController extends Controller
             }
 
             $classAverages[$class->id] = [
-                'nilai' => $totalCount > 0 ? round($totalSkor / $totalCount, 1) : 0,
+                'nilai' => $grades['average'] !== null ? round($grades['average'], 1) : 0,
                 'kehadiran' => $totalAttendance > 0 ? round(($hadirCount / $totalAttendance) * 100, 1) : 0,
             ];
         }
@@ -355,7 +346,7 @@ class MuridController extends Controller
             'completed_at' => now(),
         ]);
 
-        return redirect()->route('murid.enrolled-classes.show', $quiz->meeting->class)->with('success', 'Kuis berhasil dikerjakan!');
+        return redirect()->route('murid.quiz.result', $scoreRecord)->with('success', 'Kuis berhasil dikerjakan!');
     }
 
     public function checkDeadline(Quiz $quiz)
@@ -442,6 +433,43 @@ class MuridController extends Controller
         $assignment->load('skill', 'meeting.class');
 
         return view('murid.assignments.review', compact('assignment', 'submission'));
+    }
+
+    public function viewSubmissionFile(AssignmentSubmission $submission)
+    {
+        if ($submission->id_student !== auth()->id()) {
+            abort(403);
+        }
+
+        if (!$submission->file_url || !Storage::disk('public')->exists($submission->file_url)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return Storage::disk('public')->response($submission->file_url);
+    }
+
+    public function destroySubmission(Assignment $assignment)
+    {
+        if (!$assignment->meeting->class->students->contains(auth()->user())) {
+            abort(403);
+        }
+
+        $submission = AssignmentSubmission::where('id_assignment', $assignment->id)
+            ->where('id_student', auth()->id())
+            ->first();
+
+        if (!$submission) {
+            return back()->with('error', 'Tidak ada jawaban untuk dihapus.');
+        }
+
+        if ($submission->file_url && Storage::disk('public')->exists($submission->file_url)) {
+            Storage::disk('public')->delete($submission->file_url);
+        }
+
+        $submission->delete();
+
+        return redirect()->route('murid.enrolled-classes.show', $assignment->meeting->class)
+            ->with('success', 'Jawaban tugas berhasil dihapus.');
     }
 
     public function enrolledClasses()

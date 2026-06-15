@@ -9,7 +9,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Menunggu Verifikasi</p>
@@ -26,7 +26,7 @@
             </a>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Murid</p>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Guru</p>
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Kelas</p>
@@ -74,7 +74,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <!-- Distribution by Course -->
-        <div class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+        <div class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Peminatan Kursus</h2>
             <div class="space-y-4">
                 @php
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Recent Registrations -->
-        <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <h2 class="text-lg font-bold text-gray-800 dark:text-white">Registrasi Terbaru</h2>
                 <a href="{{ route('admin.registrations.index') }}" class="text-sm text-blue-600 hover:underline">Lihat Semua</a>
@@ -144,14 +144,14 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Active Classes -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <h2 class="text-lg font-bold text-gray-800 dark:text-white">Kelas Aktif Terbaru</h2>
                 <a href="{{ route('admin.classes.index') }}" class="text-sm text-blue-600 hover:underline">Semua Kelas</a>
             </div>
             <div class="p-6 space-y-4">
                 @forelse($activeClasses as $class)
-                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                         <div>
                             <p class="font-bold text-gray-900 dark:text-white">{{ $class->nama_kelas }}</p>
                             <p class="text-sm text-gray-500">{{ $class->course->nama_bahasa }} • Guru: {{ $class->guru->nama_lengkap }}</p>
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Recent Users -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <h2 class="text-lg font-bold text-gray-800 dark:text-white">User Baru</h2>
                 <a href="{{ route('admin.users.index') }}" class="text-sm text-blue-600 hover:underline">Kelola User</a>

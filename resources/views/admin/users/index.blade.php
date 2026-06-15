@@ -8,38 +8,16 @@
         <p class="text-gray-500 dark:text-gray-400 mt-1">{{ $subtitle ?? 'Kelola akun guru, murid, dan admin' }}</p>
     </div>
 
-    @if (session('success'))
-        <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-            <div class="flex items-center gap-2 text-green-800 dark:text-green-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                {{ session('success') }}
-            </div>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <div class="flex items-center gap-2 text-red-800 dark:text-red-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                {{ session('error') }}
-            </div>
-        </div>
-    @endif
-
     <!-- Search & Filter -->
-    <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Daftar {{ str_replace('Manajemen ', '', $title ?? 'User') }}</h2>
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Daftar {{ str_replace(['Manajemen ', 'kelola '], '', $title ?? 'User') }}</h2>
             <a href="{{ route('admin.users.create', ['role' => $role ?? '']) }}"
                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                Tambah {{ str_replace('Manajemen ', '', $title ?? 'User') }}
+                Tambah {{ str_replace(['Manajemen ', 'kelola '], '', $title ?? 'User') }}
             </a>
         </div>
         <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-end gap-3">
@@ -83,10 +61,10 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-2">
-                <button type="submit" class="px-4 py-2 text-sm bg-blue-500 text-gray-100 rounded-lg hover:bg-blue-600 transition font-medium !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                     Filter
                 </button>
-                <a href="{{ url()->current() }}" class="px-4 py-2 text-sm bg-red-500 text-gray-100 rounded-lg hover:bg-red-600 transition font-medium !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                <a href="{{ url()->current() }}" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition">
                     Reset
                 </a>
             </div>
@@ -102,7 +80,7 @@
         </form>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -111,7 +89,6 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Username</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">{{ (isset($role) && $role === 'murid') ? 'Kursus Bahasa' : 'Role' }}</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Dibuat</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Aksi</th>
                     </tr>
                 </thead>
@@ -156,7 +133,6 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{{ $user->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center gap-2" x-data="{ open: false }">
                                     <a href="{{ route('admin.users.edit', $user) }}"
@@ -189,7 +165,7 @@
                                                 </div>
                                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Hapus User</h3>
                                             </div>
-                                            <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                            <p class="text-gray-600 dark:text-gray-300 mb-6 break-words" style="word-break: break-word; overflow-wrap: break-word; white-space: normal; max-width: 100%;">
                                                 Apakah Anda yakin ingin menghapus <strong>{{ $user->nama_lengkap }}</strong>?<br>
                                                 <span class="text-sm text-gray-500 dark:text-gray-400">Tindakan ini tidak dapat dibatalkan.</span>
                                             </p>
@@ -217,7 +193,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                                 Belum ada data user
                             </td>
                         </tr>

@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-purple-500 text-gray-100 py-3 rounded-lg hover:bg-purple-600 transition font-semibold !important" style="background-color: #a855f7 !important; color: #f3f4f6 !important;">
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                     📋 Buat Tugas
                 </button>
             </form>

@@ -11,7 +11,7 @@
     @if($classes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($classes as $class)
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-start justify-between mb-4">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ $class->nama_kelas }}</h3>
@@ -47,7 +47,7 @@
                     </div>
 
                     <a href="{{ route('guru.quizzes.class-results', $class) }}"
-                       class="block text-center bg-indigo-600 text-gray-100 py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium !important" style="background-color: #4f46e5 !important; color: #f3f4f6 !important;">
+                       class="block text-center bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
                         📝 Lihat Hasil Quiz
                     </a>
                 </div>

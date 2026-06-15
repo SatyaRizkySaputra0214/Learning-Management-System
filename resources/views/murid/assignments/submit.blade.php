@@ -9,7 +9,7 @@
         <p class="text-gray-500 dark:text-gray-400 mt-1">Skill: {{ $assignment->skill->nama_skill }}</p>
     </div>
 
-    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         @if($existingSubmission)
             <div class="mb-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
                 <div class="flex items-center gap-2 text-green-700 dark:text-green-300">
@@ -49,11 +49,11 @@
 
             <div class="flex items-center justify-between gap-4">
                 <a href="{{ route('murid.enrolled-classes.show', $assignment->meeting->class) }}"
-                   class="bg-red-500 hover:bg-red-600 text-gray-100 px-6 py-3 rounded-lg transition font-medium !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                     ← Batal
                 </a>
                 <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition font-medium shadow-md !important" style="background-color: #2563eb !important; color: #ffffff !important;">
+                        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm">
                     {{ $existingSubmission ? '✏️ Update Jawaban' : '✓ Kumpulkan Tugas' }}
                 </button>
             </div>

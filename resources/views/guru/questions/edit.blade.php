@@ -8,7 +8,7 @@
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Edit Soal</h1>
     </div>
 
-    <div class="max-w-3xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="max-w-3xl bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <form method="POST" action="{{ route('guru.questions.update', $question) }}" class="space-y-6">
             @csrf
             @method('PUT')
@@ -16,7 +16,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Soal *</label>
                 <textarea name="soal" rows="4" required 
-                          class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('soal', $question->soal) }}</textarea>
+                          class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ str_replace('[[NEWLINE]]', "\n", old('soal', $question->soal)) }}</textarea>
             </div>
 
             <div>
@@ -62,11 +62,11 @@
             </div>
 
             <div class="flex gap-4 pt-4">
-                <button type="submit" class="bg-green-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-green-600 transition font-medium flex-1 !important" style="background-color: #22c55e !important; color: #f3f4f6 !important;">
+                <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium flex-1">
                     ✓ Update Soal
                 </button>
                 <a href="{{ route('guru.quizzes.edit', $question->quiz) }}"
-                   class="bg-red-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-red-600 transition font-medium !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200">
                     Batal
                 </a>
             </div>

@@ -9,7 +9,7 @@
     </div>
 
     <!-- Search & Filter -->
-    <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Daftar Kelas</h2>
             <a href="{{ route('admin.classes.create') }}"
@@ -22,10 +22,15 @@
         </div>
         <form method="GET" action="{{ route('admin.classes.index') }}" class="flex flex-wrap items-end gap-3">
             <!-- Search Input -->
-            <div class="flex-1 min-w-[250px]">
+            <div class="flex-1 min-w-[250px] relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
                 <input type="text" name="search" value="{{ request('search') }}"
-                       placeholder="🔍 Cari nama kelas, periode, kursus, atau guru..."
-                       class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                       placeholder="Cari nama kelas, periode, kursus, atau guru..."
+                       class="w-full pl-10 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
 
             <!-- Kursus Filter -->
@@ -49,10 +54,10 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-2">
-                <button type="submit" class="px-4 py-2 text-sm bg-blue-500 text-gray-100 rounded-lg hover:bg-blue-600 transition font-medium" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                     Filter
                 </button>
-                <a href="{{ route('admin.classes.index') }}" class="px-4 py-2 text-sm bg-red-500 text-gray-100 rounded-lg hover:bg-red-600 transition font-medium" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                <a href="{{ route('admin.classes.index') }}" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition">
                     Reset
                 </a>
             </div>
@@ -65,7 +70,7 @@
         </form>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -108,16 +113,14 @@
                             <td class="px-6 py-4 whitespace-nowrap text-right">
                                 <div class="flex items-center justify-end gap-2" x-data="{ open: false }">
                                     <a href="{{ route('admin.classes.edit', $class) }}"
-                                       class="inline-flex items-center gap-1 bg-blue-500 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-600 transition text-xs font-medium whitespace-nowrap !important"
-                                       style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                                       class="inline-flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-xs font-medium">
                                         <svg class="w-3.5 h-3.5" style="fill: #f3f4f6;" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
                                         </svg>
                                         Edit
                                     </a>
                                     <a href="{{ route('admin.classes.show', $class) }}"
-                                       class="inline-flex items-center gap-1 bg-green-500 text-gray-100 px-4 py-2 rounded-lg hover:bg-green-600 transition text-xs font-medium whitespace-nowrap !important"
-                                       style="background-color: #22c55e !important; color: #f3f4f6 !important;">
+                                       class="inline-flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-xs font-medium">
                                         <svg class="w-3.5 h-3.5" style="fill: #f3f4f6;" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                                         </svg>
@@ -146,7 +149,7 @@
                                                 </div>
                                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Hapus Kelas</h3>
                                             </div>
-                                            <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                            <p class="text-gray-600 dark:text-gray-300 mb-6 break-words" style="word-break: break-word; overflow-wrap: break-word; white-space: normal; max-width: 100%;">
                                                 Apakah Anda yakin ingin menghapus kelas <strong>{{ $class->nama_kelas }}</strong>?<br>
                                                 <span class="text-sm text-gray-500 dark:text-gray-400">Tindakan ini tidak dapat dibatalkan.</span>
                                             </p>

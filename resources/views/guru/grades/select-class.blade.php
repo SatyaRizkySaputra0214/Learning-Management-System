@@ -11,7 +11,7 @@
     @if($classes->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($classes as $class)
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <div class="flex items-start justify-between mb-4">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ $class->nama_kelas }}</h3>
@@ -47,7 +47,7 @@
                     </div>
 
                     <a href="{{ route('guru.grades.summary', $class) }}"
-                       class="block text-center bg-green-500 text-gray-100 py-2 rounded-lg hover:bg-green-600 transition text-sm font-medium !important" style="background-color: #22c55e !important; color: #f3f4f6 !important;">
+                       class="block text-center bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700 transition text-sm font-medium">
                         📊 Lihat Rekap Nilai
                     </a>
                 </div>
@@ -60,7 +60,7 @@
             </div>
         @endif
     @else
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
             </svg>

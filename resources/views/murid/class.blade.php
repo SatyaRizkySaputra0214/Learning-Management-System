@@ -11,7 +11,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Daftar Pertemuan</h2>
 
                 @if($class->meetings->count() > 0)
@@ -67,7 +67,7 @@
         </div>
 
         <div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Informasi Kelas</h3>
                 <dl class="space-y-3">
                     <div>

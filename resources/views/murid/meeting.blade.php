@@ -19,7 +19,7 @@
     {{-- ================= PENGUMUMAN ================= --}}
     @if($meeting->announcements->count() > 0)
         <div class="mb-4">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
                     Pengumuman
                 </h2>
@@ -50,7 +50,7 @@
 
         {{-- ================= LEFT COLUMN (MATERI) ================= --}}
         <div class="h-full">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 h-full">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 h-full">
                 
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
                     Materi
@@ -98,7 +98,7 @@
         <div class="space-y-4 h-full">
 
             {{-- ================= KUIS ================= --}}
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
                     Kuis
                 </h2>
@@ -160,7 +160,7 @@
 
 
             {{-- ================= TUGAS ================= --}}
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
                     Tugas
                 </h2>
@@ -189,8 +189,7 @@
                                 @if($submission)
                                     @if($isGraded)
                                         <a href="{{ route('murid.assignment.review', $assignment) }}"
-                                           class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap flex items-center gap-1"
-                                           style="background-color: #16a34a !important; color: #ffffff !important;">
+                                           class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap flex items-center gap-1">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                             </svg>
@@ -198,15 +197,13 @@
                                         </a>
                                     @else
                                         <a href="{{ route('murid.assignment.review', $assignment) }}"
-                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap"
-                                           style="background-color: #2563eb !important; color: #ffffff !important;">
+                                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap">
                                             Status
                                         </a>
                                     @endif
                                 @else
                                     <a href="{{ route('murid.assignment.submit', $assignment) }}"
-                                       class="{{ $isOverdue ? 'bg-red-600 hover:bg-red-700' : 'bg-orange-600 hover:bg-orange-700' }} text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap"
-                                       style="{{ $isOverdue ? 'background-color: #dc2626 !important;' : 'background-color: #ea580c !important;' }} color: #ffffff !important;">
+                                       class="{{ $isOverdue ? 'bg-red-600 hover:bg-red-700' : 'bg-orange-600 hover:bg-orange-700' }} text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap">
                                         {{ $isOverdue ? 'Terlewat' : 'Kumpulkan' }}
                                     </a>
                                 @endif

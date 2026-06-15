@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'LMS Bahasa') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         // Set default theme to dark, and persist theme across page navigation
         (function() {
@@ -101,7 +104,7 @@
             <div class="flex items-center justify-between px-4 py-3">
                 <div class="flex items-center gap-3">
                     <button @click="toggleSidebar()"
-                            class="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -172,8 +175,10 @@
 
         <div class="flex flex-1 overflow-hidden">
             <!-- Sidebar -->
-            <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-                   class="fixed inset-y-0 left-0 z-20 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0">
+            <aside :class="sidebarOpen
+                ? 'translate-x-0 lg:w-64'
+                : '-translate-x-full lg:translate-x-0 lg:w-16'"
+                   class="fixed inset-y-0 left-0 z-20 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-all duration-300 ease-in-out lg:static lg:inset-0 overflow-hidden">
                 <nav class="mt-4 px-3 space-y-1">
                     {{ $sidebar }}
                 </nav>
@@ -188,38 +193,21 @@
             <main class="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
                 <div class="p-6">
                     @if(session('success'))
-                        <div x-data="{ show: true }" x-show="show"
-                             class="mb-6 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 p-4 rounded-md">
-                            <div class="flex items-center">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 101.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-green-700 dark:text-green-300">{{ session('success') }}</span>
-                            </div>
-                        </div>
+                        <x-alert type="success" :message="session('success')" />
                     @endif
 
                     @if(session('error'))
-                        <div x-data="{ show: true }" x-show="show"
-                             class="mb-6 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-md">
-                            <div class="flex items-center">
-                                <svg class="h-5 w-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-red-700 dark:text-red-300">{{ session('error') }}</span>
-                            </div>
-                        </div>
+                        <x-alert type="error" :message="session('error')" />
                     @endif
 
                     @if($errors->any())
-                        <div x-data="{ show: true }" x-show="show"
-                             class="mb-6 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 rounded-md">
-                            <ul class="list-disc list-inside text-yellow-700 dark:text-yellow-300 text-sm">
+                        <x-alert type="warning">
+                            <ul class="list-disc list-inside text-sm">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
-                        </div>
+                        </x-alert>
                     @endif
 
                     {{ $slot }}

@@ -316,6 +316,10 @@ class GuruController extends Controller
             abort(403);
         }
 
+        $request->merge([
+            'soal' => str_replace(["\r\n", "\r", "\n"], '[[NEWLINE]]', $request->soal),
+        ]);
+
         $validated = $request->validate([
             'soal' => 'required|string',
             'opsi_a' => 'required|string',
@@ -357,6 +361,10 @@ class GuruController extends Controller
         if ($question->quiz->meeting->class->id_guru !== auth()->id()) {
             abort(403);
         }
+
+        $request->merge([
+            'soal' => str_replace(["\r\n", "\r", "\n"], '[[NEWLINE]]', $request->soal),
+        ]);
 
         $validated = $request->validate([
             'soal' => 'required|string',
@@ -490,6 +498,7 @@ class GuruController extends Controller
                 'student' => $student,
                 'submission' => $submission,
                 'has_submitted' => $submission !== null,
+                'has_file' => $submission && !empty($submission->file_url),
                 'is_graded' => $submission && $submission->nilai_guru !== null,
             ];
         }
@@ -511,6 +520,50 @@ class GuruController extends Controller
         ]);
 
         $submission->update($validated);
+
+        return back()->with('success', 'Nilai berhasil disimpan.');
+    }
+
+    public function gradeStudent(Request $request, Assignment $assignment)
+    {
+        if ($assignment->meeting->class->id_guru !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'id_student' => 'required|exists:users,id',
+            'nilai_guru' => 'required|numeric|min:0|max:100',
+            'feedback' => 'nullable|string',
+        ]);
+
+        // Check student is enrolled in the class
+        $class = $assignment->meeting->class;
+        $student = User::findOrFail($validated['id_student']);
+        if (!$class->students->contains($student)) {
+            abort(403, 'Student is not enrolled in this class');
+        }
+
+        // Find existing submission or create a new one
+        $submission = AssignmentSubmission::where('id_assignment', $assignment->id)
+            ->where('id_student', $student->id)
+            ->first();
+
+        if ($submission) {
+            // Update existing submission (student already submitted or was graded before)
+            $submission->update([
+                'nilai_guru' => $validated['nilai_guru'],
+                'feedback' => $validated['feedback'] ?? null,
+            ]);
+        } else {
+            // Create new submission record for teacher grading without student submission
+            $assignment->submissions()->create([
+                'id_student' => $student->id,
+                'nilai_guru' => $validated['nilai_guru'],
+                'feedback' => $validated['feedback'] ?? null,
+                'file_url' => '',
+                'submitted_at' => now(),
+            ]);
+        }
 
         return back()->with('success', 'Nilai berhasil disimpan.');
     }
@@ -953,6 +1006,34 @@ class GuruController extends Controller
     }
 
     // Quiz Results Management
+    public function quizResults(Request $request, Quiz $quiz)
+    {
+        // Security check
+        if ($quiz->meeting->class->id_guru !== auth()->id()) {
+            abort(403);
+        }
+
+        $class = $quiz->meeting->class;
+
+        $query = QuizScore::where('id_quiz', $quiz->id)
+            ->with(['quiz.meeting.class', 'student'])
+            ->orderBy('created_at', 'desc');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->whereHas('student', function($sq) use ($searchTerm) {
+                    $sq->where('nama_lengkap', 'LIKE', "%{$searchTerm}%");
+                });
+            });
+        }
+
+        $results = $query->paginate(15);
+
+        return view('guru.quizzes.results', compact('results', 'class', 'quiz'));
+    }
+
     public function selectClassForQuizResults()
     {
         $classes = auth()->user()->taughtClasses()->with(['course', 'students', 'meetings'])->paginate(15);

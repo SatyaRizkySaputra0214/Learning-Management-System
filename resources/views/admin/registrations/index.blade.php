@@ -13,7 +13,7 @@
     </div>
 
     <!-- Search & Filter -->
-    <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
         <form method="GET" action="{{ route('admin.registrations.index') }}" class="flex flex-wrap items-end gap-3">
             <!-- Search Input -->
             <div class="flex-1 min-w-[200px] relative">
@@ -49,10 +49,10 @@
             
             <!-- Action Buttons -->
             <div class="flex gap-2">
-                <button type="submit" class="px-4 py-2 text-sm bg-blue-500 text-gray-100 rounded-lg hover:bg-blue-600 transition font-medium !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                     Filter
                 </button>
-                <a href="{{ route('admin.registrations.index') }}" class="px-4 py-2 text-sm bg-red-500 text-gray-100 rounded-lg hover:bg-red-600 transition font-medium !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                <a href="{{ route('admin.registrations.index') }}" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition">
                     Reset
                 </a>
             </div>
@@ -68,7 +68,7 @@
         </form>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
@@ -79,7 +79,6 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kursus</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tingkat</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tanggal</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -110,7 +109,6 @@
                                     {{ ucfirst($registration->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{{ $registration->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm flex gap-3">
                                 <a href="{{ route('admin.registrations.show', $registration) }}" 
                                    class="text-blue-600 dark:text-blue-400 hover:underline">

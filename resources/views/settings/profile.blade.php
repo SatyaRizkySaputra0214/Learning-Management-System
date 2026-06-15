@@ -30,7 +30,7 @@
             <!-- Profile Content -->
             <div class="flex-1">
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
                     <div class="p-6">
                         <!-- Profile Form -->
                         <form class="max-w-md mb-10" action="{{ route('settings.profile.update') }}" method="POST">

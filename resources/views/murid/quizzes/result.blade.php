@@ -5,7 +5,7 @@
 
     <div class="max-w-3xl mx-auto">
         {{-- Main Result Card --}}
-        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-10 md:p-14 text-center overflow-hidden">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-10 md:p-14 text-center overflow-hidden">
             {{-- Decorative dot pattern --}}
             <div class="absolute -top-8 -right-8 w-48 h-48 opacity-[0.04] dark:opacity-[0.08] pointer-events-none">
                 <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Total Poin</p>
+                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Jawaban Benar</p>
                             <p class="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1.5">{{ $score->total_poin }}</p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
             </a>
 
             {{-- Bottom accent line --}}
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-700 rounded-b-2xl"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-700 rounded-b-xl"></div>
         </div>
     </div>
 </x-layouts.lms>

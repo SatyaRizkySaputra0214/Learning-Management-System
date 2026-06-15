@@ -60,6 +60,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/classes/{class}', [AdminController::class, 'updateClass'])->name('classes.update');
     Route::post('/classes/enroll', [AdminController::class, 'enrollStudents'])->name('classes.enroll');
     Route::delete('/classes/{class}', [AdminController::class, 'destroyClass'])->name('classes.delete');
+
+    // Monitoring Kelas
+    Route::get('/monitoring', [AdminController::class, 'monitoringIndex'])->name('monitoring.index');
+    Route::get('/monitoring/{class}/students/{student}', [AdminController::class, 'monitoringStudentDetail'])->name('monitoring.student');
 });
 
 // Guru Routes
@@ -95,6 +99,7 @@ Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(f
     Route::get('/quizzes/{quiz}/edit', [GuruController::class, 'editQuiz'])->name('quizzes.edit');
     Route::put('/quizzes/{quiz}', [GuruController::class, 'updateQuiz'])->name('quizzes.update');
     Route::delete('/quizzes/{quiz}', [GuruController::class, 'deleteQuiz'])->name('quizzes.delete');
+    Route::get('/quizzes/{quiz}/results', [GuruController::class, 'quizResults'])->name('quizzes.results');
     Route::post('/quizzes/{quiz}/questions', [GuruController::class, 'addQuestion'])->name('questions.add');
     Route::delete('/questions/{question}', [GuruController::class, 'deleteQuestion'])->name('questions.delete');
     Route::get('/questions/{question}/edit', [GuruController::class, 'editQuestion'])->name('questions.edit');
@@ -109,6 +114,7 @@ Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(f
     Route::delete('/assignments/{assignment}', [GuruController::class, 'deleteAssignment'])->name('assignments.delete');
     Route::get('/assignments/{assignment}/submissions', [GuruController::class, 'viewSubmissions'])->name('assignments.submissions');
     Route::post('/submissions/{submission}/grade', [GuruController::class, 'gradeSubmission'])->name('assignments.grade');
+    Route::post('/assignments/{assignment}/grade-student', [GuruController::class, 'gradeStudent'])->name('assignments.grade-student');
     Route::get('/submissions/{submission}/file', [GuruController::class, 'viewSubmissionFile'])->name('assignments.file');
 
     // Attendance
@@ -154,6 +160,8 @@ Route::middleware(['auth', 'role:murid'])->prefix('murid')->name('murid.')->grou
     Route::get('/assignments/{assignment}/submit', [MuridController::class, 'submitAssignment'])->name('assignment.submit');
     Route::post('/assignments/{assignment}/submit', [MuridController::class, 'storeAssignmentSubmission'])->name('assignment.store');
     Route::get('/assignments/{assignment}/review', [MuridController::class, 'reviewAssignment'])->name('assignment.review');
+    Route::get('/submissions/{submission}/file', [MuridController::class, 'viewSubmissionFile'])->name('assignment.file');
+    Route::delete('/assignments/{assignment}/submission', [MuridController::class, 'destroySubmission'])->name('assignment.delete');
 
     // Certificates
     Route::get('/certificates', [MuridController::class, 'certificates'])->name('certificates');

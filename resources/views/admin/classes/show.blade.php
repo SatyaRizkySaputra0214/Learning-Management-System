@@ -11,7 +11,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Daftar Murid</h2>
                 
                 @if($class->students->count() > 0)
@@ -42,7 +42,7 @@
         </div>
 
         <div class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Informasi Kelas</h3>
                 <dl class="space-y-3">
                     <div>
@@ -75,7 +75,8 @@
                 </dl>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            @if($class->status === 'aktif')
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Enroll ke Kelas</h3>
                 
                 @if($availableStudents->count() > 0)
@@ -98,7 +99,7 @@
                             </div>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">✓ Centang beberapa murid untuk menambahkan sekaligus</p>
                         </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                        <button type="submit" class="w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                             Enroll {{ $availableStudents->count() > 1 ? 'Murid Terpilih' : 'Murid' }} ke Kelas
                         </button>
                     </form>
@@ -114,6 +115,7 @@
                     </div>
                 @endif
             </div>
+            @endif
         </div>
     </div>
 </x-layouts.lms>

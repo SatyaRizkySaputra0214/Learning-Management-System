@@ -9,23 +9,7 @@
         <p class="text-gray-500 dark:text-gray-400 mt-1">{{ $meeting->judul_pertemuan }} - Pertemuan {{ $meeting->urutan_pertemuan }}</p>
     </div>
 
-    @if($errors->any())
-        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-md">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-red-700 dark:text-red-300 font-medium">Ada error pada form:</span>
-            </div>
-            <ul class="mt-2 ml-7 text-sm text-red-600 dark:text-red-400 list-disc">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <form method="POST" action="{{ route('guru.assignments.store', $meeting) }}" class="space-y-6">
             @csrf
             
@@ -105,11 +89,11 @@
             </div>
 
             <div class="flex gap-4 pt-4">
-                <button type="submit" class="bg-blue-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-purple-600 transition font-medium !important" style="background-color: #3b82f6 !important; color: #f3f4f6 !important;">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
                     Buat Tugas
                 </button>
                 <a href="{{ route('guru.classes.show', $meeting->class) }}"
-                   class="bg-red-500 text-gray-100 px-6 py-3 rounded-lg hover:bg-red-600 transition font-medium !important" style="background-color: #ef4444 !important; color: #f3f4f6 !important;">
+                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200">
                     Batal
                 </a>
             </div>
