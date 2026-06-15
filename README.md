@@ -4,7 +4,7 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-Sistem ini adalah platform **Learning Management System (LMS)** yang dirancang khusus untuk manajemen sekolah bahasa. Aplikasi ini memfasilitasi interaksi antara admin, guru, dan murid dalam proses belajar mengajar, mulai dari pendaftaran online hingga penerbitan sertifikat.
+Sistem ini adalah platform **Learning Management System (LMS)** yang dirancang khusus untuk manajemen kursus bahasa Khrufai. Aplikasi ini memfasilitasi interaksi antara admin, guru, dan murid dalam proses belajar mengajar, mulai dari pendaftaran online hingga penerbitan sertifikat.
 
 Proyek ini dibangun menggunakan **Laravel 12**, **TailwindCSS 4**, dan **Alpine.js**, memberikan pengalaman pengguna yang modern, cepat, dan responsif.
 
@@ -13,10 +13,10 @@ Proyek ini dibangun menggunakan **Laravel 12**, **TailwindCSS 4**, dan **Alpine.
 ## 2. Latar Belakang dan Tujuan
 
 ### Permasalahan
-Banyak sekolah bahasa masih menggunakan cara manual dalam mengelola pendaftaran murid, pembagian materi, pelaksanaan kuis, dan pemantauan perkembangan siswa. Hal ini sering menyebabkan ketidakteraturan data dan sulitnya pelaporan nilai.
+Kursus bahasa khrufai masih menggunakan cara manual dalam mengelola pendaftaran murid, pembagian materi, pelaksanaan kuis, dan pemantauan perkembangan siswa. Hal ini sering menyebabkan ketidakteraturan data dan sulitnya pelaporan nilai.
 
 ### Tujuan
-Membangun platform digital yang terintegrasi untuk mengotomatisasi proses administrasi dan akademik di sekolah bahasa.
+Membangun platform digital yang terintegrasi untuk mengotomatisasi proses administrasi dan akademik.
 
 ### Manfaat
 - **Bagi Admin:** Mempermudah verifikasi pendaftaran dan manajemen pengguna/kelas.
